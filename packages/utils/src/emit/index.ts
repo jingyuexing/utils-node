@@ -8,16 +8,17 @@ export function useEmit() {
             emitList.set(name, list);
          }
       },
-      Handler<T extends string>(name: T, ...args: any[]) {
+      Handler<T extends string>(name: T, ...args: any[]):Utils.Dict<T,any[]> {
          let events = emitList.get(name)
+         let obj: any = {}
          if (events) {
-            let obj: any = {}
             obj[name] = events.map((func) => {
                return func(args)
             })
             return obj
          } else {
-            return []
+            obj[name] = []
+            return obj
          }
       }
    }

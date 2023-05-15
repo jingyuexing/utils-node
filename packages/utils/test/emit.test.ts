@@ -10,6 +10,20 @@ describe("test emit",()=>{
                 return args
             }
         }
-        console.log(JSON.stringify(Handler("user",{name:"emit.test.ts"})))
+        let { user } = Handler("user",1,2,3,4,5,6)
+        expect(user).toMatchInlineSnapshot(`
+          [
+            [
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+              ],
+            ],
+          ]
+        `);
     })
 })
