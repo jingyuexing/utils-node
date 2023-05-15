@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:utils": "cd utils && pnpm run test:coverage && pnpm run test"
+    "build:utils": "cd packages/utils && pnpm run test && pnpm run test:coverage"
   },
   "dependencies": {
     "typescript":"4.9.5"
