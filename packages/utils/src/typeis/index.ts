@@ -1,7 +1,7 @@
-export function isArray(val: any): val is any[] {
+export function isArray(val: unknown): val is any[] {
    return toString.call(val) === "[object Array]"
 }
-export function isMap<K, V>(val: any): val is Map<K, V> {
+export function isMap<K, V>(val: unknown): val is Map<K, V> {
    return toString.call(val) === "[object Map]"
 }
 export function isObject<K extends number | string | symbol, V>(val: any): val is Utils.Dict<K, V> {

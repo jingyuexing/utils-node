@@ -39,7 +39,7 @@ export function format(config:{url:string,data:Utils.Dict<string,number|string|b
 export function format(url: string, data: Utils.Dict<string, number | string | boolean>|Map<string,number|string|boolean>):string
 export function format(...args:any[]):string{
   const url:string = typeof args[0] === "string" ? args[0] : toString.call(args[0]) === "[object Object]" ? args[0].url : "";
-  const data:any = toString.call(args[1]) === "[object Object]" ? args[1] : args[0].data;
+  const data:any = toString.call(args[0]) === "[object Object]" ? args[0].data :  args[1] ;
   let urlBacks = url;
   if (isMap<string,number|string|boolean>(data)) {
         data.forEach(function (value, key) {

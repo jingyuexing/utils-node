@@ -1,6 +1,6 @@
 import { describe,expect, it } from "vitest"
 
-import { isArray,isEmpty,isMap,isNull,isObject,isSet,isString,isUndefined } from "@/typeis"
+import { isArray,isArrayLike,isEmpty,isMap,isNull,isObject,isSet,isString,isUndefined } from "@/typeis"
 
 describe("test typeis",()=>{
     it("test isArray",()=>{
@@ -52,5 +52,21 @@ describe("test typeis",()=>{
         expect(isUndefined(undefined)).eq(true)
         
         expect(isUndefined([])).eq(false)
+    })
+    it("test null or undefined",()=>{
+      expect(isNull([])).eq(false)
+      expect(isNull("")).eq(false)
+      expect(isNull(null)).eq(true)
+
+      let s;
+      expect(isUndefined(s)).eq(true)
+
+      expect(isUndefined(undefined)).eq(true)
+    })
+
+    it("test isArrayLike",()=>{
+      expect(isArrayLike({length:10})).eq(true)
+
+      expect(isArrayLike([])).eq(true)
     })
 })

@@ -9,6 +9,9 @@ export function useCookies(cookies: string = document.cookie) {
          set(key: string, value: string) {
             cookiesDict.setValue(key, value);
          },
+         all(){
+            return cookiesDict.getAll()
+         },
          toString() {
             return cookiesDict.toString()
          }

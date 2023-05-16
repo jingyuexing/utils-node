@@ -9,7 +9,7 @@ describe("parse module testing case",()=>{
         console.log(cert)
     })
     it("test format",()=>{
-      let map = new Map<string,string|number>();
+      let map = new Map<string,string|number|boolean>();
       map.set("name","Jim")
       map.set("uid",13998026)
       expect(format("/user/:uid",{
