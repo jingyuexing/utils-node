@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:utils": "cd packages/utils && pnpm run test && pnpm run test:coverage",
+    "test:utils": "cd packages/utils && pnpm run test && pnpm run test:coverage",
     "utils:ui": "cd packages/utils && pnpm run test:ui"
   },
   "dependencies": {

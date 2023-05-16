@@ -7,7 +7,7 @@
   "types": "",
   "scripts": {
     "test:coverage": "npx vitest --coverage",
-    "test": "npx vitest",
+    "test": "npx vitest --run",
     "test:ui": "npx vitest --ui",
     "pack:ts": "npx rollup --config rollup.config.ts --configPlugin typescript",
     "pack:js": "npx rollup --config rollup.config.js ---inlineDynamicImports"
