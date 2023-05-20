@@ -1,5 +1,6 @@
 // C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org
-import { isMap,isObject } from "@/typeis";
+import { entries } from "@/object";
+import { isArray, isEmpty, isMap,isNull,isObject, isUndefined } from "@/typeis";
 export function parseCertString(cert:string):Utils.Dict<string,string>{
     let certObj = Object.create(null);
     let stringList = cert.split("\n");
@@ -54,4 +55,27 @@ export function format(...args:any[]):string{
         });
     }
   return urlBacks;
+}
+
+
+export function AnyToString(val:any):string{
+   let covertString = ""
+   let objCache:any = {}
+   if(isMap(val)){
+      val.forEach((value,key)=>{
+         objCache[key as string] = value
+      })
+      covertString = JSON.stringify(objCache)
+   }
+   else if(isObject(val)){
+      if(isEmpty(val)) return covertString
+      covertString = JSON.stringify(val)
+   }
+   else if(isArray(val)){
+      if(isEmpty(val)) return covertString;
+      covertString = JSON.stringify(val)
+   }else{
+      return val + ""
+   }
+   return covertString
 }
