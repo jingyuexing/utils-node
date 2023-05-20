@@ -9,6 +9,7 @@
     "skipLibCheck": true
   },
   "exclude": [
-    "test/*.test.ts"
+    "test/",
+    "*.config.ts"
   ]
 }
