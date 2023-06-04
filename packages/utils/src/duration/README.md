@@ -13,3 +13,12 @@ The specific supported time types are
 |`m`| minute |
 |`s`| second |
 |`甲子`| 60 year |
+
+
+```js
+
+duration(new Date(),"1h 40m") // This will generate a time one hour and one minute later
+
+duration(new Date(),"1甲子") //This will generate a time 60 years from now
+
+```
