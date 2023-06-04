@@ -12,7 +12,7 @@ The specific supported time types are
 |`h`| hour |
 |`m`| minute |
 |`s`| second |
-|`甲子`| 60 year |
+|`甲子`| 60 years |
 
 
 ```js
