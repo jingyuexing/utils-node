@@ -20,6 +20,14 @@ export function isSet<T>(val: unknown): val is Set<T> {
    return toString.call(val) === "[object Set]";
 }
 
+export function isNumber(val:any):val is number{
+   return toString.call(val) === "[object Number]" && !Number.isNaN(val);
+}
+
+export function isNaN(val:unknown):val is typeof NaN{
+   return Number.isNaN(val)
+}
+
 export function isArrayLike(val: unknown): boolean {
    return val?.length !== undefined;
 }
