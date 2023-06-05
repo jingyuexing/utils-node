@@ -10,4 +10,8 @@ describe('testing ipv4 case', () => {
       let ip = useIPv4(2130706433);
       expect(ip.toString()).eq('127.0.0.1');
    });
+   it('Ipv4 number test',()=>{
+      let ip = useIPv4(133765820)
+      console.log(ip+"")
+   })
 });
