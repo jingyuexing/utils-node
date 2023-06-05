@@ -3,16 +3,18 @@ this is a utils lib.
 
 ## Feat
 
-- [parse cookie string](./src/cookie)
-- [generator DOM struct](./src/DOM)
-- [generator duration](./src/duration)
-- [emit](./src/emit)
-- [IPv4 parse](./src/IPv4)
-- [logger](./src/logger)
-- [object](./src/object)
-- [query string parse](./src/query)
-- [string process](./src/string)
-- [typeis ](./src/typeis)
+**Utils**
+
+- [parse cookie string](packages/utils/src/cookie)
+- [generator DOM struct](packages/utils/src/DOM)
+- [generator duration](packages/utils/src/duration)
+- [emit](packages/utils/src/emit)
+- [IPv4 parse](packages/utils/src/IPv4)
+- [logger](packages/utils/src/logger)
+- [object](packages/utils/src/object)
+- [query string parse](packages/utils/src/query)
+- [string process](packages/utils/src/string)
+- [typeis ](packages/utils/src/typeis)
 
 
 ## parse cookie string
