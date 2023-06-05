@@ -1,31 +1,31 @@
 export function isArray(val: unknown): val is any[] {
-   return toString.call(val) === "[object Array]"
+   return toString.call(val) === '[object Array]';
 }
 export function isMap<K, V>(val: unknown): val is Map<K, V> {
-   return toString.call(val) === "[object Map]"
+   return toString.call(val) === '[object Map]';
 }
 export function isObject<K extends number | string | symbol, V>(val: any): val is Utils.Dict<K, V> {
-   return toString.call(val) === "[object Object]"
+   return toString.call(val) === '[object Object]';
 }
 
 export function isString(val: unknown): val is string {
-   return toString.call(val) === "[object String]";
+   return toString.call(val) === '[object String]';
 }
 
 export function isNull(val: unknown): val is null {
-   return toString.call(val) === "[object Null]"
+   return toString.call(val) === '[object Null]';
 }
 
 export function isSet<T>(val: unknown): val is Set<T> {
-   return toString.call(val) === "[object Set]";
+   return toString.call(val) === '[object Set]';
 }
 
-export function isNumber(val:any):val is number{
-   return toString.call(val) === "[object Number]" && !Number.isNaN(val);
+export function isNumber(val: any): val is number {
+   return toString.call(val) === '[object Number]' && !Number.isNaN(val);
 }
 
-export function isNaN(val:unknown):val is typeof NaN{
-   return Number.isNaN(val)
+export function isNaN(val: unknown): val is typeof NaN {
+   return Number.isNaN(val);
 }
 
 export function isArrayLike(val: unknown): boolean {
@@ -34,7 +34,7 @@ export function isArrayLike(val: unknown): boolean {
 
 export function isEmpty(val?: unknown): boolean {
    if (isArray(val)) {
-      isString(val)
+      isString(val);
       return val.length === 0;
    } else if (isString(val)) {
       return val.trim().length === 0;
@@ -43,10 +43,10 @@ export function isEmpty(val?: unknown): boolean {
    } else if (isObject(val)) {
       return Object.keys(val).length === 0;
    } else {
-      return false
+      return false;
    }
 }
 
 export function isUndefined(val: unknown): val is undefined {
-   return toString.call(val) === "[object Undefined]"
+   return toString.call(val) === '[object Undefined]';
 }

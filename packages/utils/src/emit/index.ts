@@ -6,20 +6,20 @@ export function useEmit() {
          return function (target: any, propertyName: string) {
             list.push(target[propertyName]);
             emitList.set(name, list);
+         };
+      },
+      Handler<T extends string>(name: T, ...args: any[]): Utils.Dict<T, any[]> {
+         let events = emitList.get(name);
+         let obj: any = {};
+         if (events) {
+            obj[name] = events.map(func => {
+               return func(args);
+            });
+            return obj;
+         } else {
+            obj[name] = [];
+            return obj;
          }
       },
-      Handler<T extends string>(name: T, ...args: any[]):Utils.Dict<T,any[]> {
-         let events = emitList.get(name)
-         let obj: any = {}
-         if (events) {
-            obj[name] = events.map((func) => {
-               return func(args)
-            })
-            return obj
-         } else {
-            obj[name] = []
-            return obj
-         }
-      }
-   }
+   };
 }

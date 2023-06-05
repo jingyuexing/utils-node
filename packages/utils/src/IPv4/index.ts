@@ -1,14 +1,14 @@
-import { isNumber, isString } from "@/typeis"
+import { isNumber, isString } from '@/typeis';
 
 export class IPv4 {
-   ipv4: string = ""
-   integer: number = 0
+   ipv4: string = '';
+   integer: number = 0;
 
    constructor(ip: string | number) {
-      if(isString(ip)){
-         this.ipv4 = ip
-      }else if(isNumber(ip)){
-         this.integer = ip
+      if (isString(ip)) {
+         this.ipv4 = ip;
+      } else if (isNumber(ip)) {
+         this.integer = ip;
       }
    }
    /**
@@ -16,29 +16,29 @@ export class IPv4 {
     * @param {number} ip [description]
     */
    _toString(ip: number) {
-      return `${(ip >> 24) & 0xff}.${(ip >> 16) & 0xff}.${(ip >> 8) & 0xff}.${(ip >> 0) & 0xff}`
+      return `${(ip >> 24) & 0xff}.${(ip >> 16) & 0xff}.${(ip >> 8) & 0xff}.${(ip >> 0) & 0xff}`;
    }
    /**
     * [_toNumber description]
     * @param {string = ""} address [description]
     */
-   _toNumber(address: string = "") {
-      if (address != "") {
-         let ipNumber = 0
-         let partIp = address.split(".")
-         let i = 0
+   _toNumber(address: string = '') {
+      if (address != '') {
+         let ipNumber = 0;
+         let partIp = address.split('.');
+         let i = 0;
          for (let ipart of partIp) {
-            ipNumber += parseInt(ipart) * (0x100 ** (3 - i))
+            ipNumber += parseInt(ipart) * 0x100 ** (3 - i);
             i++;
          }
-         return ipNumber
+         return ipNumber;
       }
    }
    toString() {
-      return this._toString(this.integer)
+      return this._toString(this.integer);
    }
    toNumber() {
-      return this._toNumber(this.ipv4)
+      return this._toNumber(this.ipv4);
    }
    /**
     * @param {string} start start condition of the iterator
@@ -51,21 +51,21 @@ export class IPv4 {
     * }
     * ```
     */
-   *generator(start: string = "", end: string = "") {
-      if (start != "" && end != "") {
-         let next = this._toNumber(start) as number
-         let final = this._toNumber(end) as number
+   *generator(start: string = '', end: string = '') {
+      if (start != '' && end != '') {
+         let next = this._toNumber(start) as number;
+         let final = this._toNumber(end) as number;
          if (start < end) {
             while (next < final) {
-               yield this._toString(next)
-               next++
+               yield this._toString(next);
+               next++;
             }
          }
       }
    }
 }
 
-export function useIPv4(ip:string|number){
-   let ip_ = new IPv4(ip)
-   return ip_
+export function useIPv4(ip: string | number) {
+   let ip_ = new IPv4(ip);
+   return ip_;
 }

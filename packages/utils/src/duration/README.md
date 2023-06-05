@@ -14,6 +14,7 @@ The specific supported time types are
 |`s`| second |
 |`甲子`| 60 years |
 
+## useage
 
 ```js
 
