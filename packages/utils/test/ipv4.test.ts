@@ -12,6 +12,6 @@ describe('testing ipv4 case', () => {
    });
    it('Ipv4 number test',()=>{
       let ip = useIPv4(133765820)
-      console.log(ip+"")
+      expect(ip+"").eq("7.249.26.188")
    })
 });
