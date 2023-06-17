@@ -10,4 +10,4 @@ export * from './logger';
 export * from './query';
 export * from './string';
 export * from './CSV';
-export * from './piple';
+export * from './pipel';
