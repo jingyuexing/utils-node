@@ -1,4 +1,4 @@
-export function usePipel<T>(): [(...callbacks: Function[]) => void, <T>(input:T) => Promise<T>] {
+export function usePipel<T>(): [(...callbacks: Function[]) => void, <T>(input:T) => Promise<T>,(handler:(e:Error,result:any)=>void)=>void] {
    let funcList: Function[] = [];
    let errorHandler: Function | null = null;
    let run = async <T>(input:T): Promise<T> => {
@@ -21,5 +21,8 @@ export function usePipel<T>(): [(...callbacks: Function[]) => void, <T>(input:T)
          funcList.push(callbacks[i]);
       }
    };
-   return [add, run];
+   let setErrorHandler = (handler:(e:Error,result:any)=>void)=>{
+      errorHandler = handler
+   }
+   return [add, run,setErrorHandler];
 }
