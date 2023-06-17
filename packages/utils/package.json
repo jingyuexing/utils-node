@@ -25,6 +25,7 @@
     "index.ts",
     "index.js",
     "dist",
+    "types",
     "src",
     "LICENSE"
   ],
