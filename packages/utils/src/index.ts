@@ -11,3 +11,4 @@ export * from './query';
 export * from './string';
 export * from './CSV';
 export * from './pipel';
+export * from './fingerprint';

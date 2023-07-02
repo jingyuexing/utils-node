@@ -6,3 +6,4 @@ export * from './src/object';
 export * from './src/query';
 export * from './src/string';
 export * from './src/typeis';
+export * from './src/fingerprint';
