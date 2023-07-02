@@ -34,7 +34,7 @@ export class DocumentCache<T extends object & {}> {
                get() {
                   let now = Date.now();
                   if (now < that.$data[key as keyof T].expires) {
-                     that.$data[key as keyof T].expires = duration(new Date(),"1m").getTime()
+                     that.$data[key as keyof T].expires += 60000
                      that.call("change","change",that.$data[key as keyof T])
                      that.call("changeTime","changeTime",that.$data[key as keyof T])
                      return that.$data[key as keyof T].value;
@@ -46,7 +46,7 @@ export class DocumentCache<T extends object & {}> {
                },
                set(v) {
                   that.$data[key as keyof T].value = v;
-                  that.$data[key as keyof T].expires = duration(new Date(),"1m").getTime()
+                  that.$data[key as keyof T].expires += 60000
                },
             });
          });
