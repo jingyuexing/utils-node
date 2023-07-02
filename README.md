@@ -15,6 +15,7 @@ this is a utils lib.
 - [query string parse](packages/utils/src/query)
 - [string process](packages/utils/src/string)
 - [typeis ](packages/utils/src/typeis)
+- [browser fingerprint](packages/utils/src/fingerprint)
 
 
 ## parse cookie string
