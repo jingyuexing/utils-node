@@ -1,9 +1,8 @@
 import { entries } from '@/object';
-import { isUndefined } from '..';
 export function fingerprint(): string {
    let FP: string = '';
    // 获取用户代理信息
-   if (!isUndefined(window)  &&  !isUndefined(navigator)) {
+   if (typeof window !== "undefined"  &&  typeof navigator !== "undefined") {
       let getUserAgent = () => {
          return `agent:${navigator.userAgent}`;
       };
