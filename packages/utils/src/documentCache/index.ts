@@ -17,7 +17,7 @@ export class DocumentCache<T extends object & {}> {
       timeout: [],
    };
    $data: ExpiresValue<T>;
-   data: ProxyValue<T>;
+   data: ProxyValue<T & object>;
    constructor(data: object = {}) {
       let that = this;
       that.$data = {} as ExpiresValue<T>;
@@ -35,14 +35,18 @@ export class DocumentCache<T extends object & {}> {
                   let now = Date.now();
                   if (now < that.$data[key as keyof T].expires) {
                      that.$data[key as keyof T].expires = duration(new Date(),"1m").getTime()
+                     that.call("change","change",that.$data[key as keyof T])
+                     that.call("changeTime","changeTime",that.$data[key as keyof T])
                      return that.$data[key as keyof T].value;
                   } else {
+                     that.call("timeout","timeout",that.$data[key as keyof T])
                      delete that.$data[key as keyof T];
                      return undefined;
                   }
                },
                set(v) {
                   that.$data[key as keyof T].value = v;
+                  that.$data[key as keyof T].expires = duration(new Date(),"1m").getTime()
                },
             });
          });
