@@ -6,65 +6,91 @@ type ExpiresValue<T> = {
       expires: number;
    };
 };
+type ProxyValue<T extends ExpiresValue<T>> = {
+   [key in keyof T]:T[key]["value"]
+}
 export class DocumentCache<T extends object & {}> {
-   private callbacks: Utils.Dict<'change' | 'changeTime' | 'changeValue' | 'timeout', (() => void)[]> = {
+   private callbacks: Utils.Dict<'change' | 'changeTime' | 'changeValue' | 'timeout', ((...args:any[]) => void)[]> = {
       change: [],
       changeTime: [],
       changeValue: [],
       timeout: [],
    };
    $data: ExpiresValue<T>;
+   data: ProxyValue<T>;
    constructor(data: object = {}) {
-      let self = this;
-      this.$data = {} as ExpiresValue<T>;
-      this.callbacks;
+      let that = this;
+      that.$data = {} as ExpiresValue<T>;
+      that.callbacks;
+      Object.keys(data).forEach(key => {
+         that.$data[key as keyof T] = {
+            value: (data as any)[key as keyof T],
+            expires: duration(new Date(), '10m').getTime(),
+         };
+      });
       if (isUndefined(Proxy)) {
          Object.keys(data).forEach(key => {
-            this.$data[key as keyof T] = {
-               value: (data as any)[key],
-               expires: duration(new Date(), '1m').getTime(),
-            };
-            Object.defineProperty(this, key, {
+            Object.defineProperty(that, key, {
                get() {
                   let now = Date.now();
-                  if (now < self.$data[key as keyof T].expires) {
-                     return self.$data[key as keyof T].value;
+                  if (now < that.$data[key as keyof T].expires) {
+                     that.$data[key as keyof T].expires = duration(new Date(),"1m").getTime()
+                     return that.$data[key as keyof T].value;
+                  } else {
+                     delete that.$data[key as keyof T];
+                     return undefined;
                   }
                },
                set(v) {
-                  self.$data[key as keyof T].value = v;
+                  that.$data[key as keyof T].value = v;
                },
             });
          });
       } else {
-         new Proxy(self, {
-            get(target: DocumentCache<{}>, p: string) {
-               let val = Reflect.get(self.$data, p) as { value: any; expires: number };
-               if (Date.now() < val.expires) {
-                  return val.value;
+         that.data = new Proxy(that.$data, {
+            get: (target, key) => {
+               let item = target[key as keyof T];
+               if (item && item.expires > Date.now()) {
+                  item.expires = duration(new Date(), "1m").getTime()
+                  this.call("change","change",item)
+                  this.call("changeTime","changeTime",item)
+                  return item.value;
+               } else {
+                  this.call("timeout",target[key as keyof T])
+                  delete target[key as keyof T];
+                  return undefined;
                }
-               return;
             },
-            set(target: DocumentCache<{}>, p: string, newValue: any): boolean {
-               let val = Reflect.get(self, p) as { value: any; expires: number };
-               if (Date.now() < val.expires) {
-                  return Reflect.set(self.$data, p, newValue);
-               }
-               return false;
+            set: (target, prop, value) => {
+               target[prop as keyof T] = {
+                  value,
+                  expires: duration(new Date(), "10m").getTime(),
+               };
+               this.call("change","change",target[prop as keyof T])
+               this.call("changeValue","changeValue",target[prop as keyof T])
+               this.call("changeTime","changeTime",target[prop as keyof T])
+               return true;
             },
          });
       }
    }
+   private call(eventName: 'change' | 'changeTime' | 'changeValue' | 'timeout',...args:any[]){
+      for(let i=0;i<this.callbacks[eventName].length;i++){
+         this.callbacks[eventName][i](...args)
+      }
+   }
    setTime(key: keyof T, time: `${number}${Utils.DurationUnits}` = '10m') {
       this.$data[key].expires = duration(new Date(), time).getTime();
+      this.call("change")
+      this.call("changeTime")
    }
-   on(eventName: 'change' | 'changeTime' | 'changeValue' | 'timeout', callback: () => void) {
+   on(eventName: 'change' | 'changeTime' | 'changeValue' | 'timeout', callback: (...args:any[]) => void) {
       // TODO:
       this.callbacks[eventName].push(callback);
    }
 }
 
-function useCeche<T extends {}>(obj: T) {
+export function useCeche<T extends {}>(obj: T) {
    let caches = new DocumentCache<T>(obj);
    function getCache() {
       return caches;
