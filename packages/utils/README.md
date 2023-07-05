@@ -1,4 +1,4 @@
-## Utils
+# Utils
 
 
 - [parse cookie string](src/cookie)
@@ -52,3 +52,12 @@ Lazy loading dom elements, compatible with browsers that do not support `Interse
 
 ## documentCache
 A cache with timeout expiration, which can extend the timeliness when you read data,please refer to the unit test for details
+
+
+# LICENSE
+
+[LICENSE](./LICENSE)
+
+---
+
+If this library helped you, you can point a star to let me know that this library helped you
