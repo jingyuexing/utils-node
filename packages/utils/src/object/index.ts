@@ -1,4 +1,10 @@
 import { isArray, isMap, isObject } from '@/typeis';
+/**
+ * exclude specified fields
+ * @type {T}
+ * @param {T} obj the target object
+ * @param {(keyof T)[]} excludeName the exclude fields
+ */
 export function exclude<T extends object>(obj: T, excludeName: (keyof T)[]) {
    let keys = Object.keys(obj) as unknown as (keyof T)[];
    let result: any = {};
@@ -9,6 +15,11 @@ export function exclude<T extends object>(obj: T, excludeName: (keyof T)[]) {
    });
    return result;
 }
+/**
+ * rename object field
+ * @param {T} obj the target object
+ * @param {{ [P in keyof T]: string }} config change config
+ */
 export function renameKey<T extends object & {}>(obj: T, config: { [P in keyof T]: string }) {
    let result = {};
    let configKeys = Object.keys(config);
@@ -22,6 +33,16 @@ export function renameKey<T extends object & {}>(obj: T, config: { [P in keyof T
       ...others,
    };
 }
+/**
+ * Convert object to entries form
+ * @example
+ * ```js
+ * entries({a:"12",b:33})
+ * // [["a","12"],["b",33]]
+ * ```
+ * @param {T} obj the target object
+ * @return {Utils.Entries<T>}
+ */
 export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T): Utils.Entries<T> {
    let entries_: [keyof T, any][] = [];
    if (isArray(obj)) {
