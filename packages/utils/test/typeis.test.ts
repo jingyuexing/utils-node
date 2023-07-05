@@ -9,6 +9,7 @@ import {
    isObject,
    isSet,
    isString,
+   isThat,
    isUndefined,
 } from '@/typeis';
 
@@ -79,4 +80,17 @@ describe('test typeis', () => {
 
       expect(isArrayLike([])).eq(true);
    });
+   it("test isThat",()=>{
+      class A {
+
+      }
+      let s = new A()
+
+      class Some {
+
+      }
+      let b = new Some();
+      expect(isThat(s,A)).eq(true)
+      expect(isThat(b,Some)).eq(true)
+   })
 });
