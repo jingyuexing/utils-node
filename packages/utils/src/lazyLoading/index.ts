@@ -1,4 +1,4 @@
-import { isArray } from "..";
+import { isArray } from "@/typeis";
 
 /**
  * @param { T[] | NodeListOf<T>} eles the html element list
