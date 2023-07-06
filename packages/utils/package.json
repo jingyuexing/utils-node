@@ -6,10 +6,12 @@
   "type": "module",
   "types": "index.ts",
   "scripts": {
+    "dev": "npx vite",
     "test:coverage": "npx vitest --coverage",
     "test": "npx vitest --run",
     "test:ui": "npx vitest --ui",
-    "pack:ts": "npx rollup --config rollup.config.ts --configPlugin typescript",
+    "pack:ts": "npx rollup -c",
+    "linter":"npx rome check",
     "pack:js": "npx rollup --config rollup.config.js ---inlineDynamicImports"
   },
   "keywords": [
@@ -27,17 +29,28 @@
     "dist",
     "types",
     "src",
+    "README.md",
     "LICENSE"
   ],
+  "bugs": {
+    "url": ""
+  },
   "repository": {
     "url": "https://github.com/jingyuexing/utils-node"
   },
   "license": "MIT",
   "devDependencies": {
-    "@vitest/ui": "0.30.1",
     "@vitest/coverage-c8": "^0.31.0",
-    "vitest": "0.30.1",
+    "@vitest/ui": "0.30.1",
+    "@rollup/plugin-alias": "^5.0.0",
+    "@rollup/plugin-commonjs": "^25.0.2",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
     "rollup": "3.20.2",
-    "vite": "4.3.9"
+    "vite": "4.3.9",
+    "vitest": "0.30.1",
+    "rome":"11.0.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-esbuild": "^5.0.0"
   }
 }
