@@ -2,7 +2,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap | keyof SVGE
    element: K,
    attributes?: Record<string, string>,
 ) {
-   let ele = document.createElement(element);
+   const ele = document.createElement(element);
    if (attributes) {
       Object.keys(attributes).forEach(key => {
          ele.setAttribute(key, attributes[key]);

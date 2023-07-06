@@ -5,6 +5,7 @@ export * from './emit/';
 export * from './DOM/createDOM';
 export * from './DOM/createElement';
 export * from './duration';
+export * from './lazyloading';
 export * from './IPv4';
 export * from './logger';
 export * from './query';

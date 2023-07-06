@@ -1,7 +1,13 @@
+import { isArray } from "..";
+
+/**
+ * @param { T[] | NodeListOf<T>} eles the html element list
+ * @param {(entry: T) => void} callback callback function, will be called when the element appears in the viewport
+ */
 export function lazyLoading<T extends Element>(eles: T[] | NodeListOf<T>, callback: (entry: T) => void) {
-   let elementList = [...eles];
+   const elements = [...eles];
    if (typeof IntersectionObserver !== 'undefined') {
-      let observer = new IntersectionObserver(entries => {
+      const observer = new IntersectionObserver(entries => {
          entries.forEach(entry => {
             if (entry.isIntersecting) {
                callback(entry.target as T);
@@ -13,10 +19,10 @@ export function lazyLoading<T extends Element>(eles: T[] | NodeListOf<T>, callba
          observer.observe(value);
       });
    } else {
-      let isVisiable = (ele: Element) => {
-         let elBounding = ele.getBoundingClientRect();
-         let windowsHeight = window.innerHeight || document.documentElement.clientHeight;
-         let windowsWidth = window.innerWidth || document.documentElement.clientWidth;
+      const isVisiable = (ele: Element) => {
+         const elBounding = ele.getBoundingClientRect();
+         const windowsHeight = window.innerHeight || document.documentElement.clientHeight;
+         const windowsWidth = window.innerWidth || document.documentElement.clientWidth;
          return (
             ((elBounding.top > 0 && elBounding.top <= windowsHeight) ||
                (elBounding.bottom > 0 && elBounding.bottom <= windowsHeight)) &&
@@ -24,19 +30,42 @@ export function lazyLoading<T extends Element>(eles: T[] | NodeListOf<T>, callba
                (elBounding.left > 0 && elBounding.left <= windowsWidth))
          );
       };
-      let func = (e: Event) => {
-         elementList.forEach(value => {
+      const func = (e: Event) => {
+         if(elements.length === 0){
+            document.removeEventListener("scroll",()=>void 0);
+            document.removeEventListener("resize",()=>void 0);
+         }
+         elements.forEach((value,index) => {
             if (isVisiable(value)) {
                callback(value);
-               elementList.findIndex((el, idx) => {
-                  if (el == value) {
-                     delete elementList[idx];
-                  }
-               });
+               elements.splice(index,1);
             }
          });
       };
       document.addEventListener('scroll', func);
       document.addEventListener('resize', func);
+   }
+   const append = (ele:T|T[])=>{
+      if(isArray(ele)){
+         elements.push(...ele);
+      }else{
+         elements.push(ele);
+      }
+   }
+   return {
+      append
+   }
+}
+
+export function useLazying<T extends Element>(){
+   const elements:T[]  = [];
+   let append = (ele:T|T[])=> {};
+   const lazyloading=(callback:(ele:T)=>void)=>{
+      const appendLazying = lazyLoading(elements,callback)
+      append = appendLazying.append
+   }
+   return {
+      append,
+      lazyloading
    }
 }

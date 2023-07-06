@@ -2,11 +2,11 @@ import { entries } from '@/object';
 import { isArray, isEmpty, isMap, isObject } from '@/typeis';
 // C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org
 export function parseCertString(cert: string): Utils.Dict<string, string> {
-   let certObj = Object.create(null);
-   let stringList = cert.split('\n');
+   const certObj = Object.create(null);
+   const stringList = cert.split('\n');
    stringList.forEach(certValue => {
       if (certValue.indexOf('=') > 0) {
-         let [key, value] = certValue.split('=');
+         const [key, value] = certValue.split('=');
          certObj[key] = value;
       }
    });
@@ -51,13 +51,13 @@ export function format(...args: any[]): string {
    let urlBacks = url;
    if (isMap<string, number | string | boolean>(data)) {
       data.forEach(function (value, key) {
-         urlBacks = (urlBacks as string).replace('{' + key + '}', value + '');
-         urlBacks = (urlBacks as string).replace(':' + key, value + '');
+         urlBacks = (urlBacks as string).replace(`{${key}}`, `${value}`);
+         urlBacks = (urlBacks as string).replace(`:${key}`, `${value}`);
       });
    } else if (isObject(data)) {
       Object.keys(data).forEach(function (key) {
-         urlBacks = urlBacks.replace('{' + key + '}', (data as any)[key] + '');
-         urlBacks = urlBacks.replace(':' + key, (data as any)[key] + '');
+         urlBacks = urlBacks.replace(`{${key}}`, `${(data as any)[key]}`);
+         urlBacks = urlBacks.replace(`:${key}`, `${(data as any)[key]}`);
       });
    }
    return urlBacks;
@@ -65,7 +65,7 @@ export function format(...args: any[]): string {
 
 export function AnyToString(val: any): string {
    let covertString = '';
-   let objCache: any = {};
+   const objCache: any = {};
    if (isMap(val)) {
       val.forEach((value, key) => {
          objCache[key as string] = value;
@@ -78,7 +78,7 @@ export function AnyToString(val: any): string {
       if (isEmpty(val)) return covertString;
       covertString = JSON.stringify(val);
    } else {
-      return val + '';
+      return `${val}`;
    }
    return covertString;
 }
@@ -90,8 +90,8 @@ export function AnyToString(val: any): string {
  * @param {number} num    [description]
  */
 export function padEnd(target: string, char: string, num: number) {
-   let back = target;
-   let pading: string[] = [];
+   const back = target;
+   const pading: string[] = [];
    if (target.length < num) {
       for (let i = 0; i < num - back.length; i++) {
          pading.push(char);

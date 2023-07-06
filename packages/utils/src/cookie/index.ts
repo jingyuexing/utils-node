@@ -1,5 +1,5 @@
 export function useCookies(cookies: string = document.cookie) {
-   let cookiesDict = new Cookies(cookies);
+   const cookiesDict = new Cookies(cookies);
    function cookie() {
       return {
          get(key: string) {
@@ -25,17 +25,17 @@ export class Cookies {
       this.cookies = this.parse(cookies);
    }
    parse(cookieString: string) {
-      let cookieDict: Utils.Dict<string, string> = {};
+      const cookieDict: Utils.Dict<string, string> = {};
       cookieString = cookieString.replace(/\s/g, '');
       for (let cookie of cookieString.split(';')) {
          cookie = cookie.trim();
-         let [key, val] = cookie.split('=');
+         const [key, val] = cookie.split('=');
          cookieDict[key] = val;
       }
       return cookieDict;
    }
    toString() {
-      let cookieString: string[] = [];
+      const cookieString: string[] = [];
       Object.keys(this.cookies).forEach(key => {
          cookieString.push(`${key}=${this.cookies[key]}`);
       });

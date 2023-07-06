@@ -9,8 +9,8 @@ export function useEmit() {
          };
       },
       Handler<T extends string>(name: T, ...args: any[]): Utils.Dict<T, any[]> {
-         let events = emitList.get(name);
-         let obj: any = {};
+         const events = emitList.get(name);
+         const obj: any = {};
          if (events) {
             obj[name] = events.map(func => {
                return func(args);

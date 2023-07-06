@@ -23,11 +23,11 @@ export class IPv4 {
     * @param {string = ""} address [description]
     */
    _toNumber(address: string = '') {
-      if (address != '') {
+      if (address !== '') {
          let ipNumber = 0;
-         let partIp = address.split('.');
+         const partIp = address.split('.');
          let i = 0;
-         for (let ipart of partIp) {
+         for (const ipart of partIp) {
             ipNumber += parseInt(ipart) * 0x100 ** (3 - i);
             i++;
          }
@@ -52,9 +52,9 @@ export class IPv4 {
     * ```
     */
    *generator(start: string = '', end: string = '') {
-      if (start != '' && end != '') {
+      if (start !== '' && end !== '') {
          let next = this._toNumber(start) as number;
-         let final = this._toNumber(end) as number;
+         const final = this._toNumber(end) as number;
          if (start < end) {
             while (next < final) {
                yield this._toString(next);
@@ -66,6 +66,6 @@ export class IPv4 {
 }
 
 export function useIPv4(ip: string | number) {
-   let ip_ = new IPv4(ip);
+   const ip_ = new IPv4(ip);
    return ip_;
 }

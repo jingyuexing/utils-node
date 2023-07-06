@@ -3,7 +3,7 @@
  * @param {Function[]} ...funs functions that need to be combined
  */
 export function compose(...funs: Function[]) {
-   let callback = (func1: Function, func2: Function) => {
+   const callback = (func1: Function, func2: Function) => {
       return function (x: any) {
          return func1(func2(x));
       };

@@ -1,3 +1,8 @@
+/**
+ * generator a specified date
+ * @param {Date}   date now
+ * @param {`${number}${Utils.DurationUnits}`} time [description]
+ */
 export function duration(date: Date, time: `${number}${Utils.DurationUnits}`) {
    enum EUnits {
       SECOND = 1000,
@@ -8,7 +13,7 @@ export function duration(date: Date, time: `${number}${Utils.DurationUnits}`) {
       MONTH = EUnits.DAY * 30,
       YEAR = EUnits.DAY * 365,
    }
-   let Units = {
+   const units = {
       Y: EUnits.YEAR,
       M: EUnits.MONTH,
       w: EUnits.WEEK,
@@ -19,14 +24,14 @@ export function duration(date: Date, time: `${number}${Utils.DurationUnits}`) {
       甲子: EUnits.YEAR * 60,
    };
    let durationTime = 0;
-   for (let dur of time.split(' ')) {
-      let number = /[+-]?\d+/;
-      let numstr = number.test(dur) ? dur.match(number)![0] : '';
-      if (numstr != '') {
-         let timeValue = parseInt(numstr);
-         let unit = dur.slice(numstr.length) as Utils.DurationUnits;
-         if (Object.keys(Units).includes(unit)) {
-            durationTime += timeValue * Units[unit];
+   for (const dur of time.split(' ')) {
+      const number = /[+-]?\d+/;
+      const numstr = number.test(dur) ? dur.match(number)![0] : '';
+      if (numstr !== '') {
+         const timeValue = parseInt(numstr);
+         const unit = dur.slice(numstr.length) as Utils.DurationUnits;
+         if (Object.keys(units).includes(unit)) {
+            durationTime += timeValue * units[unit];
          } else {
             throw new TypeError(`unknow unit ${unit}`);
          }
@@ -34,8 +39,8 @@ export function duration(date: Date, time: `${number}${Utils.DurationUnits}`) {
          throw TypeError(`can't process this time format: ${dur}`);
       }
    }
-   let nowTime = date.getTime();
-   let durDate = new Date();
+   const nowTime = date.getTime();
+   const durDate = new Date();
    durDate.setTime(nowTime + durationTime);
    return durDate;
 }

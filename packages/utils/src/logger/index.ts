@@ -72,10 +72,10 @@ class Logger {
          tag: true,
       },
    ) {
-      let { date, tag } = config;
-      let format: string[] = [];
+      const { date, tag } = config;
+      const format: string[] = [];
       if (date) {
-         let time = new Date();
+         const time = new Date();
          if (this.isBorwser) {
             format.push(
                `${time.getFullYear()}/${time.getMonth()}/${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
@@ -108,7 +108,7 @@ class Logger {
       for (let i = 0; i < this.callbacks[tag].length; i++) {
          let params: any = this;
          if (this.report) {
-            let dateInstance = new Date();
+            const dateInstance = new Date();
             params = {
                type: this.tag,
                message: message,
@@ -127,7 +127,7 @@ class Logger {
 }
 
 export function useLogger(report: boolean = false, tag: LoggerType = 'INFO') {
-   let logger = Logger.getInstance(report, tag);
+   const logger = Logger.getInstance(report, tag);
    function getLogger() {
       return logger;
    }

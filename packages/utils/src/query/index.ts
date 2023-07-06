@@ -1,8 +1,12 @@
+/**
+ * Parse document query parameters
+ * @param {string = document.location.href} query the document link
+ */
 export function useQuery(query: string = document.location.href) {
-   let queryMap = new Map<string, string>();
+   const queryMap = new Map<string, string>();
    function parse() {
-      for (let queryPair of query.split('&')) {
-         let [key, value] = queryPair.split('=');
+      for (const queryPair of query.split('&')) {
+         const [key, value] = queryPair.split('=');
          queryMap.set(key, value);
       }
    }
@@ -17,7 +21,7 @@ export function useQuery(query: string = document.location.href) {
             return this.get(key);
          },
          toString() {
-            let querystring: string[] = [];
+            const querystring: string[] = [];
             queryMap.forEach((val: string, key: string) => {
                querystring.push(`${key}=${val}`);
             });
@@ -28,14 +32,14 @@ export function useQuery(query: string = document.location.href) {
 }
 
 export function useDocQuery(url: string): Utils.Dict<string, string> {
-   let queryObject: Utils.Dict<string, string> = {};
+   const queryObject: Utils.Dict<string, string> = {};
    if (globalThis.window !== undefined && globalThis.document !== undefined) {
       url = document.location.href;
    }
-   let [host, query] = url.split('?');
+   const [host, query] = url.split('?');
    if (query) {
       query.split('&').forEach(val => {
-         let [key, value] = val.split('=');
+         const [key, value] = val.split('=');
          queryObject[key] = value;
       });
    }

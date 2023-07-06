@@ -6,8 +6,8 @@ import { isArray, isMap, isObject } from '@/typeis';
  * @param {(keyof T)[]} excludeName the exclude fields
  */
 export function exclude<T extends object>(obj: T, excludeName: (keyof T)[]) {
-   let keys = Object.keys(obj) as unknown as (keyof T)[];
-   let result: any = {};
+   const keys = Object.keys(obj) as unknown as (keyof T)[];
+   const result: any = {};
    keys.forEach(key => {
       if (!excludeName.includes(key)) {
          result[key] = obj[key];
@@ -21,12 +21,12 @@ export function exclude<T extends object>(obj: T, excludeName: (keyof T)[]) {
  * @param {{ [P in keyof T]: string }} config change config
  */
 export function renameKey<T extends object & {}>(obj: T, config: { [P in keyof T]: string }) {
-   let result = {};
-   let configKeys = Object.keys(config);
+   const result = {};
+   const configKeys = Object.keys(config);
    configKeys.forEach(key => {
       (result as any)[(config as any)[key]] = (obj as any)[key];
    });
-   let others = exclude(obj, configKeys as unknown as (keyof T)[]);
+   const others = exclude(obj, configKeys as unknown as (keyof T)[]);
 
    return {
       ...result,

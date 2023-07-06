@@ -22,7 +22,7 @@ export class DocumentCache<T extends object & {}> {
    $data: ExpiresValue<T>;
    data: ProxyValue<T & object>;
    constructor(data: object = {}) {
-      let that = this;
+      const that = this;
       that.$data = {} as ExpiresValue<T>;
       that.callbacks;
       Object.keys(data).forEach(key => {
@@ -35,7 +35,7 @@ export class DocumentCache<T extends object & {}> {
          Object.keys(data).forEach(key => {
             Object.defineProperty(that, key, {
                get() {
-                  let now = Date.now();
+                  const now = Date.now();
                   if (now < that.$data[key as keyof T].expires) {
                      that.$data[key as keyof T].expires += 60000;
                      that.call('change', 'change', that.$data[key as keyof T]);
@@ -43,7 +43,7 @@ export class DocumentCache<T extends object & {}> {
                      return that.$data[key as keyof T].value;
                   } else {
                      that.call('timeout', 'timeout', that.$data[key as keyof T]);
-                     delete that.$data[key as keyof T];
+                     that.$data[key as keyof T] = undefined;
                      return undefined;
                   }
                },
@@ -56,7 +56,7 @@ export class DocumentCache<T extends object & {}> {
       } else {
          that.data = new Proxy(that.$data, {
             get: (target, key) => {
-               let item = target[key as keyof T];
+               const item = target[key as keyof T];
                if (item && item.expires > Date.now()) {
                   item.expires = duration(new Date(), '1m').getTime();
                   this.call('change', 'change', item);
@@ -64,7 +64,7 @@ export class DocumentCache<T extends object & {}> {
                   return item.value;
                } else {
                   this.call('timeout', target[key as keyof T]);
-                  delete target[key as keyof T];
+                  target[key as keyof T] = undefined;
                   return undefined;
                }
             },
@@ -98,7 +98,7 @@ export class DocumentCache<T extends object & {}> {
 }
 
 export function useCeche<T extends {}>(obj: T) {
-   let caches = new DocumentCache<T>(obj);
+   const caches = new DocumentCache<T>(obj);
    function getCache() {
       return caches;
    }
