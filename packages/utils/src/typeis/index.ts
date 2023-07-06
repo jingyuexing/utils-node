@@ -3,7 +3,7 @@
  * @param  {unknown} val the target object
  * @return {boolean}  is an array is true else false
  */
-export function isArray(val: unknown): val is any[] {
+export function isArray(val: unknown): val is unknown[] {
    return toString.call(val) === '[object Array]';
 }
 /**
@@ -20,7 +20,7 @@ export function isMap<K, V>(val: unknown): val is Map<K, V> {
  * @param  {unknown} val the target object
  * @return {boolean}  is a Object is true else false
  */
-export function isObject<K extends number | string | symbol, V>(val: any): val is Utils.Dict<K, V> {
+export function isObject<K extends number | string | symbol, V>(val: unknown): val is Utils.Dict<K, V> {
    return toString.call(val) === '[object Object]';
 }
 
@@ -56,7 +56,7 @@ export function isSet<T>(val: unknown): val is Set<T> {
  * @param  {unknown} val the target object
  * @return {boolean}  is a Object is true else false
  */
-export function isNumber(val: any): val is number {
+export function isNumber(val: unknown): val is number {
    return toString.call(val) === '[object Number]' && !Number.isNaN(val);
 }
 
@@ -65,7 +65,8 @@ export function isNumber(val: any): val is number {
  * @param  {unknown} val the target object
  * @return {boolean}  is not a number is true else false
  */
-export function isNaN(val: unknown): val is typeof NaN {
+
+export  function isNaN(val: unknown): val is typeof NaN {
    return Number.isNaN(val);
 }
 
