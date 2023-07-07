@@ -1,23 +1,51 @@
-import { isArray } from "@/typeis";
+import { isArray } from '../typeis';
 
 /**
  * @param { T[] | NodeListOf<T>} eles the html element list
  * @param {(entry: T) => void} callback callback function, will be called when the element appears in the viewport
  */
 export function lazyLoading<T extends Element>(eles: T[] | NodeListOf<T>, callback: (entry: T) => void) {
-   const elements = [...eles];
+   const elements: T[] = [];
+   let callback_: (entry: T) => void = callback;
+   let observer: IntersectionObserver | null = null;
+   const appendElement = (ele: T | T[]) => {
+      const begin = elements.length;
+      if (isArray(ele)) {
+         elements.push(...ele);
+      } else {
+         elements.push(ele);
+      }
+      if (observer) {
+         for (let i = begin; i < elements.length; i++) {
+            observer.observe(elements[i]);
+         }
+      }
+   };
+   const setCallback = (callback: (entry: T) => void) => {
+      callback_ = callback;
+   };
+   const removeElement = (ele: T) => {
+      const index = elements.indexOf(ele);
+      if (index !== -1) {
+         elements.splice(index, 1);
+      }
+   };
+   appendElement([...eles]);
    if (typeof IntersectionObserver !== 'undefined') {
-      const observer = new IntersectionObserver(entries => {
-         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-               callback(entry.target as T);
-               observer.unobserve(entry.target);
-            }
+      if (!observer) {
+         observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+               if (entry.isIntersecting) {
+                  callback_(entry.target as T);
+                  observer?.unobserve(entry.target);
+                  removeElement(entry.target as T);
+               }
+            });
          });
-      });
-      eles.forEach(value => {
-         observer.observe(value);
-      });
+         elements.forEach(value => {
+            observer?.observe(value);
+         });
+      }
    } else {
       const isVisiable = (ele: Element) => {
          const elBounding = ele.getBoundingClientRect();
@@ -31,41 +59,23 @@ export function lazyLoading<T extends Element>(eles: T[] | NodeListOf<T>, callba
          );
       };
       const func = (e: Event) => {
-         if(elements.length === 0){
-            document.removeEventListener("scroll",()=>void 0);
-            document.removeEventListener("resize",()=>void 0);
+         if (elements.length === 0) {
+            document.removeEventListener('scroll', () => void 0);
+            document.removeEventListener('resize', () => void 0);
          }
-         elements.forEach((value,index) => {
+         elements.forEach((value, index) => {
             if (isVisiable(value)) {
-               callback(value);
-               elements.splice(index,1);
+               callback_(value);
+               removeElement(value);
             }
          });
       };
       document.addEventListener('scroll', func);
       document.addEventListener('resize', func);
    }
-   const append = (ele:T|T[])=>{
-      if(isArray(ele)){
-         elements.push(...ele);
-      }else{
-         elements.push(ele);
-      }
-   }
    return {
-      append
-   }
-}
-
-export function useLazying<T extends Element>(){
-   const elements:T[]  = [];
-   let append = (ele:T|T[])=> {};
-   const lazyloading=(callback:(ele:T)=>void)=>{
-      const appendLazying = lazyLoading(elements,callback)
-      append = appendLazying.append
-   }
-   return {
-      append,
-      lazyloading
-   }
+      appendElement,
+      removeElement,
+      setCallback,
+   };
 }
