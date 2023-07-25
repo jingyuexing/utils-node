@@ -33,7 +33,8 @@ describe('test typeis', () => {
 
       expect(isEmpty(['name']), 'this is not empty').eq(false);
 
-      expect(isEmpty(), 'this is undeined').eq(false);
+      expect(isEmpty(), 'this is empty').eq(true);
+      expect(isEmpty(null),"this is empty").eq(true)
    });
    it('test isMap', () => {
       expect(isMap(new Map()), 'this is map').eq(true);
