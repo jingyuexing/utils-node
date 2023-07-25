@@ -1,4 +1,4 @@
-import { entries } from '@/object';
+import { entries } from '../object';
 export function fingerprint(): string {
    const fP: string = '';
    // 获取用户代理信息
@@ -20,7 +20,7 @@ export function fingerprint(): string {
       const plugins: string[] = [];
       const getPlugins = () => {
          // 获取插件信息
-         for (var i = 0; i < navigator.plugins.length; i++) {
+         for (let i = 0; i < navigator.plugins.length; i++) {
             plugins.push(navigator.plugins[i].name);
          }
          return `plugins:${plugins.join(',')}`;
@@ -49,7 +49,7 @@ export function fingerprint(): string {
             'Arial Black',
             'Impact',
          ];
-         for (var i = 0; i < fontFamilies.length; i++) {
+         for (let i = 0; i < fontFamilies.length; i++) {
             const testFont = fontFamilies[i];
             const span = document.createElement('span');
             span.innerHTML = testText;

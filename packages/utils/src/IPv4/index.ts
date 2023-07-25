@@ -1,4 +1,4 @@
-import { isNumber, isString } from '@/typeis';
+import { isNumber, isString } from '../typeis';
 
 export class IPv4 {
    ipv4: string = '';

@@ -1,4 +1,4 @@
-import { isEmpty } from '..';
+import { isEmpty } from '../typeis';
 import { createElement } from './createElement';
 
 interface DOMTree {

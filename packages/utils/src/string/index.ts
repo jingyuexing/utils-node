@@ -1,5 +1,4 @@
-import { entries } from '@/object';
-import { isArray, isEmpty, isMap, isObject } from '@/typeis';
+import { isArray, isEmpty, isMap, isObject } from '../typeis';
 // C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org
 export function parseCertString(cert: string): Utils.Dict<string, string> {
    const certObj = Object.create(null);
@@ -66,18 +65,15 @@ export function format(...args: any[]): string {
 export function AnyToString(val: any): string {
    let covertString = '';
    const objCache: any = {};
+   if(isEmpty(val)){return covertString}
    if (isMap(val)) {
       val.forEach((value, key) => {
          objCache[key as string] = value;
       });
       covertString = JSON.stringify(objCache);
-   } else if (isObject(val)) {
-      if (isEmpty(val)) return covertString;
+   } else if (isObject(val) || isArray(val)) {
       covertString = JSON.stringify(val);
-   } else if (isArray(val)) {
-      if (isEmpty(val)) return covertString;
-      covertString = JSON.stringify(val);
-   } else {
+   }  else {
       return `${val}`;
    }
    return covertString;
