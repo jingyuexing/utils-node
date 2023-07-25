@@ -1,5 +1,7 @@
 # Utils
 
+[![NPM version](https://img.shields.io/npm/v/@jingyuexing/utils?color=1588cf&label=)](https://www.npmjs.com/package/@jingyuexing/utils)
+[![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@jingyuexing/utils)
 
 - [parse cookie string](src/cookie)
 - [generator DOM struct](src/DOM)
