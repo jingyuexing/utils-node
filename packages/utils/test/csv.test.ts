@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CSV } from '../src';
+import { CSV } from '../src/CSV';
 
 describe('testing csv', () => {
    it('testing CSV parse', () => {

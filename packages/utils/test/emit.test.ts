@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { useEmit } from '@/emit';
+import { useEmit } from '../src/emit';
 describe('test emit', () => {
-   let { Emit, Handler } = useEmit();
+   const { Emit, Handler } = useEmit();
    it('test emit handler', () => {
       class User {
          @Emit('user')
@@ -10,7 +10,7 @@ describe('test emit', () => {
             return args;
          }
       }
-      let { user } = Handler('user', 1, 2, 3, 4, 5, 6);
+      const { user } = Handler('user', 1, 2, 3, 4, 5, 6);
       expect(user).toMatchInlineSnapshot(`
           [
             [

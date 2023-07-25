@@ -1,4 +1,4 @@
-import { useQuery, useDocQuery } from '@/index';
+import { useQuery, useDocQuery } from '../src/query';
 import { describe, expect, it } from 'vitest';
 
 describe('test query parse', () => {
