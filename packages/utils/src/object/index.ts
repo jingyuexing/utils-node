@@ -1,4 +1,4 @@
-import { isArray, isMap, isObject } from '@/typeis';
+import { isArray, isEmpty, isMap, isObject } from '../typeis';
 /**
  * exclude specified fields
  * @type {T}
@@ -61,4 +61,41 @@ export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T)
 
 export function Extends(target: any, obj: any) {
    return Object.assign(target, Object.create(obj));
+}
+
+
+export function objectPath<T extends { [key: string | number]: any }, K extends string | keyof T>(obj: T, path: K): any | undefined {
+   return (path as string).split('.').reduce((value, key) => {
+      if (value && Object.prototype.hasOwnProperty.call(value, key)) {
+         return value[key];
+      }
+      return undefined;
+   }, obj);
+}
+
+/**
+  * Recursively filter out null values in the object
+  * @param {Object|Array} obj the object to be filtered
+  * @returns {Object|Array} Object after filtering out empty values
+  */
+export function filterEmpty<T extends any[] | Map<any, any> | (Object & {})>(obj: T): any {
+   return Array.isArray(obj)
+      ? obj.reduce((acc, cur) => {
+         if (isEmpty(cur)) { return acc }
+         const filtered = filterEmpty(cur);
+         if (!isEmpty(filtered)) {
+            return [...acc, filtered];
+         }
+         return acc;
+      }, [] as any[])
+      : Object.entries(obj as { [key: string]: any }).reduce((acc, [key, value]) => {
+         if (isEmpty(value)) {
+            return acc;
+         }
+         const filtered = filterEmpty(value);
+         if (!isEmpty(filtered)) {
+            return { ...acc, [key]: filtered };
+         }
+         return acc;
+      }, {} as any);
 }
