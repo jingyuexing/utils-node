@@ -12,8 +12,15 @@
             "nursery": {
                 "useCamelCase": "warn"
             },
+            "suspicious":{
+                "noShadowRestrictedNames":"off",
+                "noSelfCompare":"error",
+                "noExplicitAny":"off"
+            },
             "style": {
-                "recommended": true
+                "useBlockStatements":"warn",
+                "recommended": true,
+                "useSingleVarDeclarator":"off"
             }
         }
     },
