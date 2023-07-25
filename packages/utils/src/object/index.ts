@@ -82,20 +82,26 @@ export function filterEmpty<T extends any[] | Map<any, any> | (Object & {})>(obj
    return Array.isArray(obj)
       ? obj.reduce((acc, cur) => {
          if (isEmpty(cur)) { return acc }
-         const filtered = filterEmpty(cur);
-         if (!isEmpty(filtered)) {
-            return [...acc, filtered];
+         if (isObject(cur) || isArray(cur)) {
+            const filtered = filterEmpty(cur);
+            if (!isEmpty(filtered)) {
+               return [...acc, filtered];
+            }
+         } else {
+            return [...acc, cur];
          }
-         return acc;
       }, [] as any[])
       : Object.entries(obj as { [key: string]: any }).reduce((acc, [key, value]) => {
          if (isEmpty(value)) {
             return acc;
          }
-         const filtered = filterEmpty(value);
-         if (!isEmpty(filtered)) {
-            return { ...acc, [key]: filtered };
+         if (isObject(value) || isArray(value)) {
+            const filtered = filterEmpty(value);
+            if (!isEmpty(filtered)) {
+               return { ...acc, [key]: filtered };
+            }
+         } else {
+            return { ...acc, [key]: value }
          }
-         return acc;
       }, {} as any);
 }

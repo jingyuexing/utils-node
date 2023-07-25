@@ -94,9 +94,10 @@ export function isEmpty(val?: unknown): boolean {
       return val.size === 0;
    } else if (isObject(val)) {
       return Object.keys(val).length === 0;
-   } else {
-      return isNull(val) || isUndefined(val);
+   } else if(isNull(val) || isUndefined(val)){
+      return true
    }
+   return false
 }
 
 /**
