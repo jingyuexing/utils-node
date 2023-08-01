@@ -15,7 +15,7 @@ const { action, setState, onStateChange } = useStateMachine<["A", "B", "C"]>(["A
 
 describe("state testing", () => {
   it("testing", () => {
-    expect(action()).eq("A");
+    expect(action()).eq("onA");
     setState("B");
     onStateChange((state) => {
       console.log(`current state is:${state}`);
@@ -35,9 +35,9 @@ describe("state testing", () => {
     });
     action()
     setState("close")
-    expect(action()).eq("close")
+    expect(action()).eq("onclose")
     setState("open")
     action()
-    expect(action()).eq("open")
+    expect(action()).eq("onopen")
   });
 });
