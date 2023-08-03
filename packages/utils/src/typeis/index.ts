@@ -101,6 +101,15 @@ export function isEmpty(val?: unknown): boolean {
 }
 
 /**
+ * check if an object is an empty value, example: null,undefine,NaN
+ * @param  {unknown} val the target value
+ * @returns {boolean} is an empty value is true else false
+ */
+export function isNone(val:unknown):val is undefined | null | typeof NaN {
+   return isNaN(val) || isUndefined(val) || isNull(val)
+}
+
+/**
  * check if an object is a undefined object
  * @param  {unknown} val the target object
  * @return {boolean}  is a undefined is true else false
