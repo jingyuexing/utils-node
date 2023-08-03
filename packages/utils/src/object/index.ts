@@ -63,7 +63,11 @@ export function Extends(target: any, obj: any) {
    return Object.assign(target, Object.create(obj));
 }
 
-
+/**
+ * @param {T} obj the target object
+ * @param {K} path the key
+ * @type {T}
+ */
 export function objectPath<T extends { [key: string | number]: any }, K extends string | keyof T>(obj: T, path: K): any | undefined {
    return (path as string).split('.').reduce((value, key) => {
       if (value && Object.prototype.hasOwnProperty.call(value, key)) {
