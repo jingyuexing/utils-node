@@ -1,4 +1,5 @@
 import { isArray, isEmpty, isMap, isObject } from '../typeis';
+import type { Entries, Keyof } from '../types'
 /**
  * exclude specified fields
  * @type {T}
@@ -43,7 +44,7 @@ export function renameKey<T extends object & {}>(obj: T, config: { [P in keyof T
  * @param {T} obj the target object
  * @return {Utils.Entries<T>}
  */
-export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T): Utils.Entries<T> {
+export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T): Entries<T> {
    let entries_: [keyof T, any][] = [];
    if (isArray(obj)) {
       obj.forEach((val, index) => {
@@ -53,7 +54,7 @@ export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T)
       entries_ = [...obj.entries()] as [any, any][];
    } else if (isObject(obj)) {
       Object.keys(obj).forEach(key => {
-         entries_.push([key as Utils.Keyof<T>, (obj as any)[key]]);
+         entries_.push([key as Keyof<T>, (obj as any)[key]]);
       });
    }
    return entries_ as Utils.Entries<T>;
