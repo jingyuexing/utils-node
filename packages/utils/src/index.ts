@@ -4,6 +4,7 @@ export * from './typeis';
 export * from './emit/';
 export * from './DOM/createDOM';
 export * from './DOM/createElement';
+export * from './DOM/useReady'
 export * from './duration';
 export * from './lazyloading';
 export * from './IPv4';
@@ -15,3 +16,4 @@ export * from './CSV';
 export * from './pipel';
 export * from './fingerprint';
 export * from './chian';
+export * from './types'
