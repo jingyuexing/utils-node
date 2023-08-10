@@ -1,3 +1,5 @@
+import { Dict } from "../types";
+
 /**
  * check if an object is an array
  * @param  {unknown} val the target object
@@ -20,7 +22,7 @@ export function isMap<K, V>(val: unknown): val is Map<K, V> {
  * @param  {unknown} val the target object
  * @return {boolean}  is a Object is true else false
  */
-export function isObject<K extends number | string | symbol, V>(val: unknown): val is Utils.Dict<K, V> {
+export function isObject<K extends number | string | symbol, V>(val: unknown): val is Dict<K, V> {
    return toString.call(val) === '[object Object]';
 }
 
