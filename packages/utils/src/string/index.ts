@@ -1,6 +1,7 @@
+import { Dict } from '../types';
 import { isArray, isEmpty, isMap, isObject } from '../typeis';
 // C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org
-export function parseCertString(cert: string): Utils.Dict<string, string> {
+export function parseCertString(cert: string): Dict<string, string> {
    const certObj = Object.create(null);
    const stringList = cert.split('\n');
    stringList.forEach(certValue => {
@@ -15,12 +16,12 @@ export function parseCertString(cert: string): Utils.Dict<string, string> {
 /**
  * [export description]
  *
- * @param   {{url:string,data:Utils.Dict<string,number|string|boolean>|Map<string,number|string|boolean>}} config  the format config
+ * @param   {{url:string,data:Dict<string,number|string|boolean>|Map<string,number|string|boolean>}} config  the format config
  * @return  {string} result string
  */
 export function format(config: {
    url: string;
-   data: Utils.Dict<string, number | string | boolean> | Map<string, number | string | boolean>;
+   data: Dict<string, number | string | boolean> | Map<string, number | string | boolean>;
 }): string;
 /**
  * format string
@@ -36,12 +37,12 @@ export function format(config: {
  * }) // output "/user/12"
  * ```
  * @param {string} url the url string
- * @param {Utils.Dict<string, number | string | boolean>|Map<string,number|string|boolean>} data the format data
+ * @param {Dict<string, number | string | boolean>|Map<string,number|string|boolean>} data the format data
  * @return  {string}  the format result
  */
 export function format(
    url: string,
-   data: Utils.Dict<string, number | string | boolean> | Map<string, number | string | boolean>,
+   data: Dict<string, number | string | boolean> | Map<string, number | string | boolean>,
 ): string;
 export function format(...args: any[]): string {
    const url: string =

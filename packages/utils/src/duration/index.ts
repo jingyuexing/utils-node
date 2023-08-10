@@ -1,9 +1,11 @@
+import type { DurationUnits } from "../types";
+
 /**
  * generator a specified date
  * @param {Date}   date now
- * @param {`${number}${Utils.DurationUnits}`} time [description]
+ * @param {`${number}${DurationUnits}`} time [description]
  */
-export function duration(date: Date, time: `${number}${Utils.DurationUnits}`) {
+export function duration(date: Date, time: `${number}${DurationUnits}`) {
    enum EUnits {
       SECOND = 1000,
       MINUTE = EUnits.SECOND * 60,
@@ -29,7 +31,7 @@ export function duration(date: Date, time: `${number}${Utils.DurationUnits}`) {
       const numstr = number.test(dur) ? dur.match(number)![0] : '';
       if (numstr !== '') {
          const timeValue = parseInt(numstr);
-         const unit = dur.slice(numstr.length) as Utils.DurationUnits;
+         const unit = dur.slice(numstr.length) as DurationUnits;
          if (Object.keys(units).includes(unit)) {
             durationTime += timeValue * units[unit];
          } else {

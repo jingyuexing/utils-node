@@ -1,3 +1,5 @@
+import { Dict } from "../types";
+
 export function useCookies(cookies: string = document.cookie) {
    const cookiesDict = new Cookies(cookies);
    function cookie() {
@@ -20,12 +22,12 @@ export function useCookies(cookies: string = document.cookie) {
 }
 
 export class Cookies {
-   cookies: Utils.Dict<string, string>;
+   cookies: Dict<string, string>;
    constructor(cookies: string) {
       this.cookies = this.parse(cookies);
    }
    parse(cookieString: string) {
-      const cookieDict: Utils.Dict<string, string> = {};
+      const cookieDict: Dict<string, string> = {};
       cookieString = cookieString.replace(/\s/g, '');
       for (let cookie of cookieString.split(';')) {
          cookie = cookie.trim();

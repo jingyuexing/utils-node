@@ -1,5 +1,7 @@
+import { Dict } from "../types";
+
 type LoggerType = 'DEBUG' | 'WARN' | 'INFO' | 'ERROR';
-type LoggerEventCallbacks = Utils.Dict<LoggerType, ((data: ReportType | Logger) => void)[]>;
+type LoggerEventCallbacks = Dict<LoggerType, ((data: ReportType | Logger) => void)[]>;
 type ReportType = { type: LoggerType; message: string; date: string; url: string };
 class Logger {
    private tag: 'DEBUG' | 'WARN' | 'INFO' | 'ERROR' = 'INFO';

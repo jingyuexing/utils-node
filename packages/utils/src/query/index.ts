@@ -1,3 +1,5 @@
+import { Dict } from "../types";
+
 /**
  * Parse document query parameters
  * @param {string = document.location.href} query the document link
@@ -31,8 +33,8 @@ export function useQuery(query: string = document.location.href) {
    })();
 }
 
-export function useDocQuery(url: string): Utils.Dict<string, string> {
-   const queryObject: Utils.Dict<string, string> = {};
+export function useDocQuery(url: string): Dict<string, string> {
+   const queryObject: Dict<string, string> = {};
    if (globalThis.window !== undefined && globalThis.document !== undefined) {
       url = document.location.href;
    }
