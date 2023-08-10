@@ -1,4 +1,8 @@
 import { entries } from '../object';
+/**
+ * get browser fingerprint
+ * @return {string} the browser fingerprint
+ */
 export function fingerprint(): string {
    const fP: string = '';
    // 获取用户代理信息
