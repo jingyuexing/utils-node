@@ -23,3 +23,7 @@ export declare type Entries<T extends Map<keyof T,T[keyof T]> | any[] | object> 
   : T extends any[]
   ? [keyof T, T[keyof T]][]
   : never;
+export interface Some<T>{
+  expect(msg:string):Some<T>;
+  unwrap():T;
+}
