@@ -7,7 +7,7 @@ export function Some<T>(val:T){
             _msg = msg
             return some_
         },
-        unwrap(){
+        unwrap(): T extends undefined ? 'None' : T extends null ? 'None' : T {
             if(isNone(_val)){
                 console.error(_msg)
                 return 'None'
@@ -23,3 +23,5 @@ export function Some<T>(val:T){
     }
     return some_;
 }
+
+Some(undefined).unwrap()
