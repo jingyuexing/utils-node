@@ -1,5 +1,9 @@
 import { isNone } from '../typeis'
 import type { Nullable,Options, OptionsInspectCallback,OptionsNone,OptionsSome } from '../types'
+/**
+ * Creates an empty option (None).
+ * @returns An empty option (None).
+ */
 export function None<T>(): OptionsNone<T> {
   return {
     isSome: () => false,
@@ -13,7 +17,11 @@ export function None<T>(): OptionsNone<T> {
     inspect: () => None(),
   };
 }
-
+/**
+ * Creates an option with a value (Some).
+ * @param value The value to wrap in the option.
+ * @returns An option with the specified value.
+ */
 export function Some<T>(value: T): OptionsSome<T> {
   return {
     isSome: () => true,
@@ -52,7 +60,11 @@ export function Some<T>(value: T): OptionsSome<T> {
     },
   };
 }
-
+/**
+ * Creates an option from a value.
+ * @param value The value to convert to an option.
+ * @returns An option containing the specified value, or an empty option (None) if the value is null or undefined.
+ */
 export function Option<T>(value: Nullable<T>): Options<T> {
   if (isNone(value)) {
     return None();
