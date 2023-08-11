@@ -1,9 +1,9 @@
 import { isNone } from '../typeis'
 export function Some<T>(val:T){
     let _val = val
-    let _msg = ''
+    let _msg = 'this value is not valid type'
     const some_ = {
-        expect(msg){
+        expect(msg = 'this value is not valid type'){
             _msg = msg
             return some_
         },
