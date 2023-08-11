@@ -12,6 +12,7 @@ export * from './logger';
 export * from './LRU';
 export * from './query';
 export * from './string';
+export * from './options';
 export * from './CSV';
 export * from './pipel';
 export * from './fingerprint';

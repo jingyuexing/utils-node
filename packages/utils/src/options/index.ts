@@ -1,6 +1,6 @@
 import { isNone } from '../typeis'
-import type { Nullable,Options, OptionsInspectCallback,Some as Some_,None as None_ } from '../types'
-export function None<T>(): None_<T> {
+import type { Nullable,Options, OptionsInspectCallback,OptionsNone,OptionsSome } from '../types'
+export function None<T>(): OptionsNone<T> {
   return {
     isSome: () => false,
     isNone: () => true,
@@ -14,7 +14,7 @@ export function None<T>(): None_<T> {
   };
 }
 
-export function Some<T>(value: T): Some_<T> {
+export function Some<T>(value: T): OptionsSome<T> {
   return {
     isSome: () => true,
     isNone: () => false,
