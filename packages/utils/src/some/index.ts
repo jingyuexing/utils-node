@@ -9,9 +9,16 @@ export function Some<T>(val:T){
         },
         unwrap(){
             if(isNone(_val)){
-                throw Error(_msg)
+                console.error(_msg)
+                return 'None'
             }
             return _val
+        },
+        toString(){
+            if(isNone(_val)){
+                return 'None'
+            }
+            return `${_val}`
         }
     }
     return some_;
