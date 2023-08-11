@@ -1,6 +1,6 @@
 {
   "name": "@jingyuexing/utils",
-  "version": "0.1.6-alpha",
+  "version": "0.1.7",
   "description": "",
   "type": "module",
   "types": "dist/index.d.ts",
