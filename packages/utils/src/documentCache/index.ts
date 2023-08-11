@@ -1,5 +1,6 @@
 import { isUndefined } from '@/typeis';
 import { duration } from '../duration';
+import type { Dict, DurationUnits } from '../types';
 type ExpiresValue<T> = {
    [P in keyof T]: {
       value: T[P];
@@ -10,7 +11,7 @@ type ProxyValue<T extends ExpiresValue<T>> = {
    [key in keyof T]: T[key]['value'];
 };
 export class DocumentCache<T extends object & {}> {
-   private callbacks: Utils.Dict<
+   private callbacks: Dict<
       'change' | 'changeTime' | 'changeValue' | 'timeout',
       ((...args: any[]) => void)[]
    > = {
@@ -86,7 +87,7 @@ export class DocumentCache<T extends object & {}> {
          this.callbacks[eventName][i](...args);
       }
    }
-   setTime(key: keyof T, time: `${number}${Utils.DurationUnits}` = '10m') {
+   setTime(key: keyof T, time: `${number}${DurationUnits}` = '10m') {
       this.$data[key].expires = duration(new Date(), time).getTime();
       this.call('change');
       this.call('changeTime');

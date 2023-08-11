@@ -42,13 +42,13 @@ export function renameKey<T extends object & {}>(obj: T, config: { [P in keyof T
  * // [["a","12"],["b",33]]
  * ```
  * @param {T} obj the target object
- * @return {Utils.Entries<T>}
+ * @return {Entries<T>}
  */
 export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T): Entries<T> {
    let entries_: [keyof T, any][] = [];
    if (isArray(obj)) {
       obj.forEach((val, index) => {
-         entries_.push([index as Utils.Keyof<T>, val]);
+         entries_.push([index as Keyof<T>, val]);
       });
    } else if (isMap(obj)) {
       entries_ = [...obj.entries()] as [any, any][];
@@ -57,7 +57,7 @@ export function entries<T extends any[] | Map<any, any> | (Object & {})>(obj: T)
          entries_.push([key as Keyof<T>, (obj as any)[key]]);
       });
    }
-   return entries_ as Utils.Entries<T>;
+   return entries_ as Entries<T>;
 }
 
 export function Extends(target: any, obj: any) {
