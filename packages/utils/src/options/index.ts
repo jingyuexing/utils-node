@@ -1,5 +1,5 @@
-import { isNone } from '../typeis'
-import type { Nullable,Options, OptionsInspectCallback,OptionsNone,OptionsSome } from '../types'
+import { isArray, isNone, isObject } from '../typeis'
+import type { Nullable,Options, OptionsInspectCallback,OptionsNone,OptionsSome, ToOptions } from '../types'
 /**
  * Creates an empty option (None).
  * @returns An empty option (None).
@@ -23,6 +23,7 @@ export function None<T>(): OptionsNone<T> {
  * @returns An option with the specified value.
  */
 export function Some<T>(value: T): OptionsSome<T> {
+   const _value = value
   return {
     isSome: () => true,
     isNone: () => false,
@@ -31,32 +32,32 @@ export function Some<T>(value: T): OptionsSome<T> {
         console.error('Value is None');
         return 'None';
       }
-      return value;
+      return _value;
     },
     unwrapOr: <Default>(defaultValue: Default) => {
-      if (isNone(value)) {
+      if (isNone(_value)) {
         return defaultValue;
       }
-      return value;
+      return _value;
     },
     isSomeAnd: (callback:(val:T)=>boolean) => {
-      if (isNone(value)) {
+      if (isNone(_value)) {
         return false;
       }
-      return callback(value);
+      return callback(_value);
     },
     expect: (msg: string) => {
-      if (isNone(value)) {
+      if (isNone(_value)) {
         throw new Error(msg);
       }
-      return value;
+      return _value;
     },
     inspect: (callback: OptionsInspectCallback<T>) => {
-      if (isNone(value)) {
+      if (isNone(_value)) {
         return None();
       }
-      callback(value);
-      return Some(value);
+      callback(_value);
+      return Some(_value);
     },
   };
 }
@@ -72,3 +73,23 @@ export function Option<T>(value: Nullable<T>): Options<T> {
     return Some(value);
   }
 }
+
+export function toOption<T>(value: T): ToOptions<T> {
+  if (isNone(value)) {
+    return Option(value) as ToOptions<T>;
+  }
+
+  if (isArray(value)) {
+    return Option(value.map((val) => toOption(val))) as ToOptions<T>;
+  }
+
+  if (isObject(value)) {
+    const optionsObject = Object.entries(value).reduce((acc, [key, val]) => {
+      return { ...acc, [key]: toOption(val) };
+    }, {}) as ToOptions<T>;
+    return Option(optionsObject) as ToOptions<T>
+  }
+
+  return Option(value) as ToOptions<T>;
+}
+

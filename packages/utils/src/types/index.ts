@@ -29,7 +29,7 @@ export declare type OptionsInspectCallback<T> = (value: T) => void;
  * Represents an optional value that may or may not exist.
  */
 export declare interface Options<T> {
-   /**
+  /**
    * Checks if the option contains a value (Some).
    * @returns `true` if the option contains a value, `false` otherwise.
    */
@@ -43,13 +43,13 @@ export declare interface Options<T> {
    * Retrieves the value from the option.
    * @returns The value if it exists, or 'None' if the option is empty.
    */
-  unwrap(): T | 'None';
+  unwrap(): T extends null | undefined ? "None" : T;
   /**
    * Retrieves the value from the option, or returns a default value if the option is empty.
    * @param defaultValue The default value to return if the option is empty.
    * @returns The value if it exists, or the specified default value.
    */
-  unwrapOr<V>(defaultValue: V): V|T;
+  unwrapOr<V>(defaultValue: V): V | T;
   /**
    * Checks if the option contains a value (Some) and satisfies a condition.
    * @param callback The condition to check against the value.
@@ -72,13 +72,21 @@ export declare interface Options<T> {
 }
 
 export declare interface OptionsSome<T> extends Options<T> {
-   unwrap():T | 'None'
-   isSome(): true
-   isNone(): false
+  isSome(): true;
+  isNone(): false;
 }
 
 export declare interface OptionsNone<T> extends Options<T> {
-   unwrap():'None'
-   isSome(): false
-   isNone(): true
+  isSome(): false;
+  isNone(): true;
 }
+
+export type ToObjectOptions<T> = {
+  [Keys in keyof T]: T[Keys] extends object ? ToObjectOptions<T[Keys]> : Options<T[Keys]>;
+};
+
+export type ToOptions<T> = T extends unknown[]
+  ? Options<ToObjectOptions<T>>
+  : T extends object
+  ? Options<ToObjectOptions<T>>
+  : Options<T>;
