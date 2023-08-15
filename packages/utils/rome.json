@@ -18,6 +18,7 @@
                 "noExplicitAny":"off"
             },
             "style": {
+                "noParameterAssign":"off",
                 "useBlockStatements":"warn",
                 "recommended": true,
                 "useSingleVarDeclarator":"off"
