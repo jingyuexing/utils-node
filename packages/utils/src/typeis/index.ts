@@ -135,3 +135,22 @@ export function isThat<T>(val: unknown, typeobject: { new(): T }): val is T {
    const valString = Object.prototype.toString.call(val);
    return typeString === valString;
 }
+/**
+ * check if an object is default value is true otherwise is false
+ * @param {unknown} val the value to be checked
+ */
+export function isZero(val:unknown){
+   if(isArray(val)){
+      return JSON.stringify(val) === "[]"
+   }else if(isObject(val)){
+      return JSON.stringify(val) === "{}"
+   }else if(isNumber(val)){
+      return val === 0
+   }else if(isMap(val) || isSet(val)){
+      return val.size === 0
+   }else if(isString(val)){
+      return val === ""
+   }else{
+      return false
+   }
+}
