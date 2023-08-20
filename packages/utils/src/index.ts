@@ -14,6 +14,7 @@ export * from './query';
 export * from './string';
 export * from './options';
 export * from './CSV';
+export * from './validate'
 export * from './pipel';
 export * from './fingerprint';
 export * from './chian';
