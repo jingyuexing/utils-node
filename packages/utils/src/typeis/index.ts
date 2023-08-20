@@ -69,7 +69,11 @@ export function isNumber(val: unknown): val is number {
  */
 
 export  function isNaN(val: unknown): val is typeof NaN {
-   return Number.isNaN(val);
+   if(Number.isNaN){
+      return Number.isNaN(val);
+   }else{
+      return typeof val === 'number' && (val).toString() === 'NaN'
+   }
 }
 
 /**
