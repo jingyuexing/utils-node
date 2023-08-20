@@ -38,9 +38,12 @@ describe("validate testing",()=>{
    })
    it("testing is",()=>{
       const { values } = validate({
-         address:"is:eth"
+         address:"is:eth",
+         hex:"is=hex"
       })
-      values.address = "0x74b47e789702166b5d4ccc1bdfdcaac5217065f9b3ae76d8d8c0158eaec91cd4"
-      expect(values.address).eq(values.address)
+      values.address = "0xB92B4A201f4320A6Db6d1fb2d3Bac834bDaa95C9"
+      expect(values.address).eq("0xB92B4A201f4320A6Db6d1fb2d3Bac834bDaa95C9")
+      values.hex = "0xB92B4A201f4320A6Db6d1fb2d3Bac834bDaa95C9"
+      expect(values.hex).eq("0xB92B4A201f4320A6Db6d1fb2d3Bac834bDaa95C9")
    })
 })
