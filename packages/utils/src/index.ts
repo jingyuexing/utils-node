@@ -2,6 +2,7 @@ export * from './cookie';
 export * from './object';
 export * from './typeis';
 export * from './emit/';
+export * from './overload'
 export * from './DOM/createDOM';
 export * from './DOM/createElement';
 export * from './DOM/useReady'
@@ -14,7 +15,6 @@ export * from './query';
 export * from './string';
 export * from './options';
 export * from './CSV';
-export * from './validate'
 export * from './pipel';
 export * from './fingerprint';
 export * from './chian';
