@@ -2,6 +2,9 @@ export * from './cookie';
 export * from './object';
 export * from './typeis';
 export * from './emit/';
+export * from "./fun/debounce"
+export * from "./fun/memoized"
+export * from "./fun/times"
 export * from './overload'
 export * from './DOM/createDOM';
 export * from './DOM/createElement';
