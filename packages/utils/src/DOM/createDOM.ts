@@ -5,7 +5,7 @@ interface DOMTree {
    tag: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
    className?: string;
    style?: Partial<CSSStyleDeclaration>;
-   children?: DOMTree[] | string;
+   children?: DOMTree[] | string|number;
 }
 
 export function createDOM(config: { root: HTMLElement; tree: DOMTree }): HTMLElement;
@@ -26,10 +26,10 @@ export function createDOM(...args: any[]) {
          ele.style[key] = style[key];
       }
    }
-   if (typeof children === 'string') {
-      const text = document.createTextNode(children);
+   if (typeof children === 'string' || typeof children === "number") {
+      const text = document.createTextNode(`${children}`);
       ele.appendChild(text);
-   } else {
+   } else{
       children.forEach(tree => createDOM(ele, tree));
    }
    root.appendChild(ele);
