@@ -5,10 +5,13 @@ export * from './emit/';
 export * from "./fun/debounce"
 export * from "./fun/memoized"
 export * from "./fun/times"
+export * from "./fun/useBroadcastChannel"
+export * from "./fun/useTask"
 export * from './overload'
 export * from './DOM/createDOM';
 export * from './DOM/createElement';
 export * from './DOM/useReady'
+export * from './DOM/useMouseEnterDirection'
 export * from './duration';
 export * from './lazyloading';
 export * from './IPv4';
