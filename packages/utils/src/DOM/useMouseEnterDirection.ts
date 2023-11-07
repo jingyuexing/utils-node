@@ -1,4 +1,5 @@
-export function useMouseEnterDirection<T extends HTMLElement>(el:T,cb:(direction:"top"|"bottom"|"left"|"right")=>void){
+export function useMouseEnterDirection<T extends HTMLElement|undefined>(el:T,cb:(direction:"top"|"bottom"|"left"|"right")=>void){
+   if(!el) {throw new Error(`must spectify element "${el}" is not a valid HTMLElement type`)}
    const react = el.getBoundingClientRect();
    const theta = Math.atan2(react.height,react.width)
    el.addEventListener("mouseenter",(e)=>{
