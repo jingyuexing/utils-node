@@ -1,4 +1,4 @@
-import { Overload } from '@/overload';
+import { Overload } from '@/fun/overload';
 import { describe, expect, it, test } from 'vitest';
 
 describe("function overload testing case",()=>{
