@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
    isArray,
    isArrayLike,
+   isAsyncFunction,
    isEmpty,
    isMap,
    isNull,
@@ -85,13 +86,17 @@ describe('test typeis', () => {
       class A {
 
       }
-      let s = new A()
+      const s = new A()
 
       class Some {
 
       }
-      let b = new Some();
+      const b = new Some();
       expect(isThat(s,A)).eq(true)
       expect(isThat(b,Some)).eq(true)
+   })
+   it("test async function",()=>{
+      const func1 = async ()=>{}
+      expect(isAsyncFunction(func1)).eq(true)
    })
 });

@@ -3,11 +3,11 @@ import { expect, it, describe } from 'vitest';
 
 describe('testing pipel', function () {
    it('testing pipel 1', () => {
-      let [add, run] = usePipel();
-      let double = (a: number) => {
+      const [add, run] = usePipel();
+      const double = (a: number) => {
          return a * 2;
       };
-      let mult = (a: number) => {
+      const mult = (a: number) => {
          return a - 3;
       };
       add(double, mult);
@@ -16,8 +16,8 @@ describe('testing pipel', function () {
       });
    });
    it('testing pipel 2', () => {
-      let [add, run, handler] = usePipel();
-      let our = () => {
+      const [add, run, handler] = usePipel();
+      const our = () => {
          throw Error('testing exepection');
       };
       handler((e, result) => {
