@@ -37,7 +37,7 @@ export function convert() {
          throw new Error('Invalid storage unit');
       }
 
-      const diff = fromIndex - toIndex;
+      const diff = toIndex - fromIndex;
 
       if (diff === 0) {
          return value;
@@ -62,6 +62,7 @@ export function convert() {
 
       return speed * fromFactor / toFactor;
    }
+   type chineseUnit = "寸"| "分" | "寸";
    return {
       length,
       weight,
