@@ -99,7 +99,11 @@ export function isEmpty(val?: unknown): boolean {
    } else if (isSet(val) || isMap(val)) {
       return val.size === 0;
    } else if (isObject(val)) {
-      return Object.keys(val).length === 0;
+      if(isUndefined(Reflect)){
+         return Object.getOwnPropertyNames(val).length === 0
+      }else{
+         return Reflect.ownKeys(val).length === 0
+      }
    } else if(isNull(val) || isUndefined(val)){
       return true
    }
@@ -121,7 +125,7 @@ export function isNone(val:unknown):val is undefined | null | typeof NaN {
  * @return {boolean}  is a undefined is true else false
  */
 export function isUndefined(val: unknown): val is undefined {
-   return toString.call(val) === '[object Undefined]';
+   return (typeof val) === "undefined";
 }
 
 /**
@@ -154,3 +158,13 @@ export function isZero(val:unknown){
       return false
    }
 }
+
+/**
+ * [isAsyncFunction description]
+ * @param  {unknown} val [description]
+ * @return {val}         [description]
+ */
+export function isAsyncFunction(val:unknown): val is Promise<unknown>{
+   return toString.call(val) === "[object AsyncFunction]"
+}
+

@@ -1,7 +1,7 @@
 import { reactive } from "@/reactive";
 import { Dict } from "../types";
 import { Option } from "../options";
-import { isArray, isNone, isNumber, isString } from "../typeis";
+import { isArray, isNone, isNull, isNumber, isString, isUndefined } from "../typeis";
 
 type OneOfRule = `oneof=${string};`;
 type MaxOrMin = `${"max" | "min"}=${number | string};`;
@@ -156,6 +156,9 @@ export function validate<T>(target: ValidateObject<T>) {
     },
     array: (value: unknown) => {
       return isArray(value);
+    },
+    required:(value:unknown)=>{
+      return !isUndefined(value)
     },
     is: (value: unknown, rule: string) => {
       return new RegExp(`${rules[rule as keyof typeof rules]}`).test(value as string);
