@@ -25,19 +25,27 @@ export function useDebounce<T, P extends object & {}>(callback: (...args: P[]) =
 }
 
 export function debounce<T>(delay: number): MethodDecorator {
-  return function (_target: Object, _propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>) {
-    const originalMethod = descriptor.value;
-    descriptor.value = useDebounce<T,ReturnType<typeof originalMethod>>(originalMethod)
-    return descriptor;
-  };
+   return function (
+      _target: Object,
+      _propertyKey: string | symbol,
+      descriptor: TypedPropertyDescriptor<any>,
+   ) {
+      const originalMethod = descriptor.value;
+      descriptor.value = useDebounce<T, ReturnType<typeof originalMethod>>(originalMethod);
+      return descriptor;
+   };
 }
 
-export function debouncedByEvent(name:string,cb: Function,remove:[remove:typeof document.removeEventListener]) {
-   const [_remove] = remove
+export function debouncedByEvent(
+   name: string,
+   cb: Function,
+   remove: [remove: typeof document.removeEventListener],
+) {
+   const [_remove] = remove;
    return function (...args: any[]) {
-      cb(...args)
-      _remove(name,(e)=>{
-         cb(e,...args)
-      })
-   }
+      cb(...args);
+      _remove(name, e => {
+         cb(e, ...args);
+      });
+   };
 }

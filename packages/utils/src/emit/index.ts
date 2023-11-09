@@ -1,4 +1,4 @@
-import type { Dict } from "../types";
+import type { Dict } from '../types';
 
 export function useEmit() {
    const emitList = new Map<string, Function[]>();
@@ -10,7 +10,7 @@ export function useEmit() {
             emitList.set(name, list);
          };
       },
-      Handler<T extends string,R>(name: T, ...args: R[]): Dict<T, R[]> {
+      Handler<T extends string, R>(name: T, ...args: R[]): Dict<T, R[]> {
          const events = emitList.get(name);
          const obj: any = {};
          if (events) {

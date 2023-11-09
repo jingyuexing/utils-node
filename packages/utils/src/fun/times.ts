@@ -17,14 +17,11 @@ export function times<P, T>(cb: (...args: P[]) => T, x: number) {
       return _value;
    };
    const reset = () => {
-      _times = 0
-   }
+      _times = 0;
+   };
    return {
       reset,
       onerror,
       invoke,
    };
 }
-
-
-

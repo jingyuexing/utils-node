@@ -7,7 +7,7 @@ export * from './fun/memoized';
 export * from './fun/times';
 export * from './fun/useBroadcastChannel';
 export * from './fun/useTask';
-export * from "./convert";
+export * from './convert';
 export * from './fun/overload';
 export * from './DOM/createDOM';
 export * from './DOM/createElement';
