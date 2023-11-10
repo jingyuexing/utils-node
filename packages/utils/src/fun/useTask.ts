@@ -1,3 +1,8 @@
+/**
+ * @DOM
+ * [datas description]
+ * @type {T[]}
+ */
 export function useTask<T>(datas: T[], cb: (task: T[]) => void, chunk = 10) {
    const _data: T[] = datas;
    if (_data.length === 0) {

@@ -1,3 +1,7 @@
+/**
+ * @DOM
+ * [useDocumentReadyState description]
+ */
 export function useDocumentReadyState() {
   const eventMap: {
     [key in DocumentReadyState]: Function[];

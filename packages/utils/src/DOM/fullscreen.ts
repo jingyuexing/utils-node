@@ -3,6 +3,12 @@ type FullScreenReturns = {
     setTarget: (ele: Element) => void,
     error: (cb: (e: Error) => void) => void
 }
+
+/**
+ * @DOM
+ * [useFullScreen description]
+ * @return {FullScreenReturns} [description]
+ */
 export function useFullScreen(): FullScreenReturns {
     let _switch = false
     let _targetDOM: Element = document.body;
