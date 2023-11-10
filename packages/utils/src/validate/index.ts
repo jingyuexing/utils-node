@@ -255,7 +255,7 @@ export function validate<T>(target: ValidateObject<T>) {
                   isValid &&
                   validators["oneof"](
                     value,
-                    Option(ruleValue)
+                    Option(()=>ruleValue)
                       .unwrapOr("")
                       .split(",")
                       .map((val) => (parseFloat(val) ? parseFloat(val) : val)) as (string | number)[],
@@ -265,25 +265,25 @@ export function validate<T>(target: ValidateObject<T>) {
                 isValid = isValid && validators["array"](value);
                 break;
               case "min":
-                isValid = isValid && validators["min"](value, parseFloat(Option(ruleValue as string).unwrapOr("0")));
+                isValid = isValid && validators["min"](value, parseFloat(Option(()=>ruleValue as string).unwrapOr("0")));
                 break;
               case "max":
-                isValid = isValid && validators["max"](value, parseFloat(Option(ruleValue).unwrapOr("65535")));
+                isValid = isValid && validators["max"](value, parseFloat(Option(()=>ruleValue).unwrapOr("65535")));
                 break;
               case "gt":
-                isValid = isValid && validators["gt"](value, parseFloat(Option(ruleValue).unwrapOr("0")));
+                isValid = isValid && validators["gt"](value, parseFloat(Option(()=>ruleValue).unwrapOr("0")));
                 break;
               case "lt":
-                isValid = isValid && validators["lt"](value, parseFloat(Option(ruleValue).unwrapOr("0")));
+                isValid = isValid && validators["lt"](value, parseFloat(Option(()=>ruleValue).unwrapOr("0")));
                 break;
               case "gte":
-                isValid = isValid && validators["gte"](value, parseFloat(Option(ruleValue).unwrapOr("0")));
+                isValid = isValid && validators["gte"](value, parseFloat(Option(()=>ruleValue).unwrapOr("0")));
                 break;
               case "lte":
-                isValid = isValid && validators["lte"](value, parseFloat(Option(ruleValue).unwrapOr("0")));
+                isValid = isValid && validators["lte"](value, parseFloat(Option(()=>ruleValue).unwrapOr("0")));
                 break;
               case "is":
-                isValid = isValid && validators["is"](value, Option(ruleValue).unwrapOr(""));
+                isValid = isValid && validators["is"](value, Option(()=>ruleValue).unwrapOr(""));
                 break;
             }
             if (!isValid) {
