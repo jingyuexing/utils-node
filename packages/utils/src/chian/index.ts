@@ -38,7 +38,11 @@ export function chain() {
                current?.cllback.call(null)
             });
          } catch (error) {
-            errorCallback(error as Error);
+            if(errorCallback){
+               errorCallback(error as Error);
+            }else{
+               throw error
+            }
          }
          current = current.next
       }
