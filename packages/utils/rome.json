@@ -15,7 +15,8 @@
             "suspicious":{
                 "noShadowRestrictedNames":"off",
                 "noSelfCompare":"error",
-                "noExplicitAny":"off"
+                "noExplicitAny":"off",
+                "noAssignInExpressions":"off"
             },
             "style": {
                 "noParameterAssign":"off",
