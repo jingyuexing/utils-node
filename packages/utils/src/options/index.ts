@@ -65,6 +65,9 @@ export function Some<T>(value: ()=>T): OptionsSome<T> {
  * @returns An option containing the specified value, or an empty option (None) if the value is null or undefined.
  */
 export function Option<T>(value:()=>Nullable<T>): Options<T> {
+   if(typeof value !== "function"){
+      throw new TypeError(`the value must be a function, not should be ${(typeof value)}`)
+   }
    if (isNone(value())) {
       return None();
    } else {
