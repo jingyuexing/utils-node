@@ -1,6 +1,6 @@
 {
   "name": "@jingyuexing/utils",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -13,7 +13,8 @@
     "pack:ts": "npx rollup -c",
     "linter": "npx rome check",
     "build":"npx rollup -c",
-    "build:ts": "pnpm run pack:ts"
+    "build:ts": "pnpm run pack:ts",
+    "publish": "npx rollup -c && npm publish"
   },
   "exports": {
     ".": {
