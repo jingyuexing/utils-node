@@ -81,8 +81,8 @@ export  function isNaN(val: unknown): val is typeof NaN {
  * @param  {unknown} val the target object
  * @return {boolean}  is like an array is true else false
  */
-export function isArrayLike(val: unknown & { length: number }): boolean {
-   return val.length !== undefined
+export function isArrayLike(val: unknown & { length: number } & {size:number}): boolean {
+   return val.length !== undefined || val.size !== undefined;
 }
 
 /**
@@ -92,7 +92,6 @@ export function isArrayLike(val: unknown & { length: number }): boolean {
  */
 export function isEmpty(val?: unknown): boolean {
    if (isArray(val)) {
-      isString(val);
       return val.length === 0;
    } else if (isString(val)) {
       return val.trim().length === 0;
