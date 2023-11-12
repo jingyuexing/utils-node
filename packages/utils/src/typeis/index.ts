@@ -6,7 +6,7 @@ import { Dict } from "../types";
  * @return {boolean}  is an array is true else false
  */
 export function isArray(val: unknown): val is unknown[] {
-   return toString.call(val) === '[object Array]';
+   return !isUndefined(Array.isArray) ? Array.isArray(val) : toString.call(val) === '[object Array]';
 }
 /**
  * check if an object is a Map
@@ -115,7 +115,7 @@ export function isEmpty(val?: unknown): boolean {
  * @returns {boolean} is an empty value is true else false
  */
 export function isNone(val:unknown):val is undefined | null | typeof NaN {
-   return isNaN(val) || isUndefined(val) || isNull(val)
+   return isNaN(val) || isUndefined(val) || isNull(val) || isInfinity(val)
 }
 
 /**
@@ -159,6 +159,15 @@ export function isZero(val:unknown){
 }
 
 /**
+ * check if an object is a Infinity value
+ * @param  {unknown} val the target object
+ * @return {boolean}  is a Infinity or -Infinity is true else false
+ */
+export function isInfinity(val:unknown){
+   return val === Infinity || val === (-Infinity)
+}
+
+/**
  * [isAsyncFunction description]
  * @param  {unknown} val [description]
  * @return {val}         [description]
@@ -166,4 +175,32 @@ export function isZero(val:unknown){
 export function isAsyncFunction(val:unknown): val is Promise<unknown>{
    return toString.call(val) === "[object AsyncFunction]"
 }
-
+/**
+ * check if an object is a primitive type
+ * @param  {unknown} val the target object
+ * @return {boolean}  is a `string`,`number`,`undefined`,`bigint`,`boolean` is true else false
+ */
+export function isPrimitive(val:unknown):boolean {
+   const type = typeof val;
+   return (
+      type === "string" ||
+      type === "number" ||
+      type === "undefined" ||
+      type === "bigint" ||
+      type === "boolean"
+   )
+}
+/**
+ * @deprecated
+ * @param  {unknown} a [description]
+ * @param  {unknown} b [description]
+ * @return {boolean}   [description]
+ */
+export function isEqual(a:unknown,b:unknown):boolean{
+   if(a === b) {
+      // this case is 0 and -0
+      return a !== 0 || 1 / a === 1 / (b as number)
+   }else{
+      return a === b
+   }
+}
