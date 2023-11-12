@@ -5,9 +5,11 @@ import {
    isArrayLike,
    isAsyncFunction,
    isEmpty,
+   isInfinity,
    isMap,
    isNull,
    isObject,
+   isPrimitive,
    isSet,
    isString,
    isThat,
@@ -36,6 +38,10 @@ describe('test typeis', () => {
 
       expect(isEmpty(), 'this is empty').eq(true);
       expect(isEmpty(null),"this is empty").eq(true)
+
+      expect(isEmpty({
+         [Symbol('a')]:12
+      })).eq(false,"this should be false")
    });
    it('test isMap', () => {
       expect(isMap(new Map()), 'this is map').eq(true);
@@ -98,5 +104,19 @@ describe('test typeis', () => {
    it("test async function",()=>{
       const func1 = async ()=>{}
       expect(isAsyncFunction(func1)).eq(true)
+   })
+   it("test primitive",()=>{
+      expect(isPrimitive(0)).eq(true)
+      expect(isPrimitive("")).eq(true)
+      expect(isPrimitive(BigInt(12))).eq(true)
+      expect(isPrimitive(true)).eq(true)
+      expect(isPrimitive(false)).eq(true)
+      expect(isPrimitive(undefined)).eq(true)
+   })
+   it("test infinity",()=>{
+      expect(isInfinity(Infinity)).eq(true)
+      expect(isInfinity(-Infinity)).eq(true)
+      expect(isInfinity(0)).eq(false)
+      expect(isInfinity(1)).eq(false)
    })
 });
