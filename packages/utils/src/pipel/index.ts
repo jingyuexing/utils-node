@@ -33,3 +33,20 @@ export function usePipel<T>(): [
    };
    return [add, run, setErrorHandler];
 }
+
+/**
+ * Executes a series of functions where the output of each function is passed as input to the next function.
+ * Returns a function that can be invoked to run the entire execution process.
+ *
+ * @param {...(args:T)=>T)[]} funs  The functions to be executed in the pipeline.
+ * @returns {(args: T) => T}  A function that executes the pipeline with the provided argument.
+ */
+export function usePipelCallback<T>(...funs:((args:T)=>T)[]){
+   return (args: T) => {
+    let result = args;
+    for (const fn of funs) {
+      result = fn(result);
+    }
+    return result;
+  };
+}
