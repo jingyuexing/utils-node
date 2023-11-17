@@ -1,4 +1,4 @@
-import { usePipel } from '@/pipel';
+import { usePipel, usePipelCallback } from '@/pipel';
 import { expect, it, describe } from 'vitest';
 
 describe('testing pipel', function () {
@@ -28,4 +28,11 @@ describe('testing pipel', function () {
       add(our);
       run(1);
    });
+   it("test pipel callback", () => {
+      const addOne = (x: number) => x + 1;
+      const double = (x: number) => x * 2;
+      const square = (x: number) => x * x;
+      const finalFunction = usePipelCallback(addOne,double,square)
+      expect(finalFunction(6)).eq(196)
+   })
 });
