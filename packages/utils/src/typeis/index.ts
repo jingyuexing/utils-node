@@ -81,7 +81,7 @@ export  function isNaN(val: unknown): val is typeof NaN {
  * @param  {unknown} val the target object
  * @return {boolean}  is like an array is true else false
  */
-export function isArrayLike(val: unknown & { length: number } & {size:number}): boolean {
+export function isArrayLike(val: unknown & { length: number } & {size?:number}): boolean {
    return val.length !== undefined || val.size !== undefined;
 }
 
@@ -203,4 +203,10 @@ export function isEqual(a:unknown,b:unknown):boolean{
    }else{
       return a === b
    }
+}
+
+
+export function isPromiseLike(value:any): value is Promise<any>{
+   const valueType = typeof value
+   return (valueType === "object" || valueType === "function") && typeof value.then === "function"
 }

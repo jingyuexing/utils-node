@@ -10,6 +10,7 @@ import {
    isNull,
    isObject,
    isPrimitive,
+   isPromiseLike,
    isSet,
    isString,
    isThat,
@@ -118,5 +119,15 @@ describe('test typeis', () => {
       expect(isInfinity(-Infinity)).eq(true)
       expect(isInfinity(0)).eq(false)
       expect(isInfinity(1)).eq(false)
+   })
+   it("test promise like",()=>{
+      expect(isPromiseLike(new Promise(()=>{}))).eq(true)
+      expect(isPromiseLike(async ()=>{})).eq(false)
+      const likePromise = {
+         then(){
+
+         }
+      }
+      expect(isPromiseLike(likePromise)).eq(true)
    })
 });
