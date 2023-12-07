@@ -139,8 +139,11 @@ describe("test typeis", () => {
     expect(typeis(undefined)).eq("undefined");
     expect(typeis(NaN)).eq("nan");
     expect(typeis(Infinity)).eq("infinity");
+    expect(typeis(-Infinity)).eq("infinity");
     expect(typeis(null)).eq("null");
     expect(typeis(new Set())).eq("set");
     expect(typeis({ then() {} })).eq("promise");
+    expect(typeis(true)).eq("boolean");
+    expect(typeis(async ()=>{})).eq("asyncFunction");
   });
 });

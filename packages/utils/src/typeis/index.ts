@@ -260,6 +260,8 @@ export function typeis(val: unknown) {
     return "undefined";
   } else if (isNull(val)) {
     return "null";
+  } else if (isBoolean(val)) {
+    return "boolean";
   } else if (isMap(val)) {
     return "map";
   } else if (isSet(val)) {
@@ -268,12 +270,12 @@ export function typeis(val: unknown) {
     return "nan";
   } else if (isBigInt(val)) {
     return "bigint";
-  } else if (isFunction(val)) {
-    return "function";
   } else if (isAsyncFunction(val)) {
     return "asyncFunction";
   } else if (isInfinity(val)) {
     return "infinity";
+  } else if (isFunction(val)) {
+    return "function";
   } else if (isNumber(val)) {
     return "number";
   } else if (isDate(val)) {
