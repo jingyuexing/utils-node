@@ -256,8 +256,6 @@ export function typeis(val: unknown) {
     return "string";
   } else if (isArray(val)) {
     return "array";
-  } else if (isNumber(val)) {
-    return "number";
   } else if (isUndefined(val)) {
     return "undefined";
   } else if (isNull(val)) {
@@ -276,6 +274,8 @@ export function typeis(val: unknown) {
     return "asyncFunction";
   } else if (isInfinity(val)) {
     return "infinity";
+  } else if (isNumber(val)) {
+    return "number";
   } else if (isDate(val)) {
     return "date";
   } else if (isWeakMap(val)) {
