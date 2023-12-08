@@ -26,3 +26,4 @@ export * from './pipel';
 export * from './fingerprint';
 export * from './chian';
 export * from './types';
+export * from './version'
