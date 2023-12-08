@@ -1,13 +1,16 @@
-type Curry<Fn extends (...args: any[]) => any, Args extends any[] = []> =
-    Args['length'] extends Parameters<Fn>['length']
-    ? ReturnType<Fn>
-    : (arg: Parameters<Fn>[Args['length']]) => Curry<Fn, [...Args, Parameters<Fn>[Args['length']]]>;
+type Curried<A extends any[], R> = A extends []
+  ? () => R
+  : A extends [infer ARGS]
+  ? (param: ARGS) => R
+  : A extends [infer ARGS, ...infer REST]
+  ? (param: ARGS) => Curried<REST, R>
+  : never;
 
-export function curry<Fn extends (...args: any[]) => any>(fn: Fn) {
-    return function curried(...args: any[]) {
-        if (args.length >= fn.length) {
-            return fn(...args);
-        }
-        return (...args2: any[]) => curried(...args, ...args2);
-    };
+export function curry<A extends any[], R>(fn: (...args: A) => R): Curried<A, R> {
+  return function curried(...args: any[]): any {
+    if (args.length >= fn.length) {
+      return fn(...(args as A));
+    }
+    return (...args2: any[]) => curried(...args, ...args2);
+  } as any;
 }
