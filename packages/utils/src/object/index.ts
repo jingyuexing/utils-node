@@ -1,6 +1,6 @@
-import { isArray, isEmpty, isMap, isNone, isObject, isPrimitive, isWeakMap, typeis } from "../typeis";
+import { isArray, isEmpty, isMap, isObject, isWeakMap } from "../typeis";
 import type { Entries, Keyof } from "../types";
-import { getRandomInt } from "@/math";
+import { getRandomInt } from "../math";
 /**
  * exclude specified fields
  * @type {T}
@@ -92,14 +92,13 @@ export function objectPath<T extends { [key: string | number]: any }, K extends 
   }, obj);
 }
 
-type NestedObjectValue = string | Record<string, NestedObjectValue>;
 
 type NestedPath<T extends string> = T extends `${infer First}.${infer Rest}`
   ? First extends string
     ? { [K in First]: NestedPath<Rest> }
     : never
   : T extends string
-  ? { [K in T]: NestedObjectValue }
+  ? { [K in T]: any }
   : never;
 
 export function createNestedObject<T extends string>(str: T, value: string, delimiter = "."): NestedPath<T> {
