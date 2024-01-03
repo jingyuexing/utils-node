@@ -54,10 +54,20 @@ function countBits(num: number): number {
 export { countBits };
 
 
+/**
+ * generator a random number
+ * @param {number} min the min value
+ * @param {number} max the max value
+ */
 export function randomRange(min:number,max:number) {
    return Math.random() * (max - min) + min
 }
 
+/**
+ * generator a random integer number
+ * @param {number} min the min value
+ * @param {number} max the max value
+ */
 export function getRandomInt(min:number, max:number) {
   min = Math.ceil(min);
   max = Math.floor(max);
