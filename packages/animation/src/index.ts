@@ -151,7 +151,7 @@ class ZenAnimation {
     * [start description]
     */
    start() {
-      if (this.isPlaying) return;
+      if (this.isPlaying) {return}
       this.isPlaying = true;
       this.startTime = performance.now();
       this.endTime = this.startTime + this.duration;
@@ -163,7 +163,7 @@ class ZenAnimation {
     * [pause description]
     */
    pause() {
-      if (!this.isPlaying) return;
+      if (!this.isPlaying) {return}
       cancelAnimationFrame(this.requestId);
       this.isPlaying = false;
       this.trigger('end');
@@ -172,10 +172,10 @@ class ZenAnimation {
     * [animate description]
     */
    animate() {
-      let now = performance.now();
+      const now = performance.now();
       let progress = (now - this.startTime) / this.duration;
       progress = Math.min(Math.max(progress, 0), 1);
-      let value = this.getAnimationFrames(progress);
+      const value = this.getAnimationFrames(progress);
       this.setStyle(value);
       this.trigger('update', value);
       if (now < this.endTime) {
@@ -191,7 +191,7 @@ class ZenAnimation {
     * @param {Partial<Values>}    value         [description]
     */
    trigger(eventName: keyof EventEmiterList, value: Partial<Values> = {}) {
-      let callbackList = this.callbacks[eventName];
+      const callbackList = this.callbacks[eventName];
       for (let i = 0; i < callbackList.length; i++) {
          callbackList[i].call(this, value);
       }
@@ -211,8 +211,8 @@ class ZenAnimation {
     * @param {Partial<Values>} value [description]
     */
    setStyle(value: Partial<Values>): void {
-      for (let prop in value) {
-         this.target.style[prop] = value[prop]! + guessUnit(prop as keyof CSSStyleDeclaration)!;
+      for (const prop in value) {
+         this.target.style[prop] = value[prop] + guessUnit(prop as keyof CSSStyleDeclaration);
       }
    }
    /**

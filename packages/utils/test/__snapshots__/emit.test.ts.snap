@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`test emit > test emit handler > some things is wrong 1`] = `
+[
+  [
+    [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+    ],
+  ],
+]
+`;

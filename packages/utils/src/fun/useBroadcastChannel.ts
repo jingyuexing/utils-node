@@ -4,12 +4,12 @@ export function useBroadcastChannel<T>(channerlName: string) {
    let _error = (message: MessageEvent<T>) => {};
    const message = (callback: (message: MessageEvent<T>) => any) => {
       _message = callback;
+      _bc.addEventListener('message', _message);
    };
    const error = (callback: (message: MessageEvent<T>) => any) => {
       _error = callback;
+      _bc.addEventListener('messageerror', _error);
    };
-   _bc.addEventListener('message', _message);
-   _bc.addEventListener('messageerror', _error);
    return {
       message,
       error,

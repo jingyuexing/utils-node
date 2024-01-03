@@ -29,7 +29,7 @@ export function hlsToRgb(h: number, l: number, s: number): [number, number, numb
    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-function hexToHsl(hexColor: string): [number, number, number] {
+export function hexToHsl(hexColor: string): [h:number, s:number, l:number] {
    // 将六位十六进制数转换为RGB颜色值
    const red = parseInt(hexColor.substring(0, 2), 16) / 255.0;
    const green = parseInt(hexColor.substring(2, 4), 16) / 255.0;
@@ -84,16 +84,28 @@ export function getContrastColor(hexColor: string): string {
 
    // 将对比色的HSL颜色值转换为六位十六进制数
    const [r, g, b] = hlsToRgb(contrastHue / 360, l / 100, s / 100);
-   return `#${[r, g, b]
-      .map(c =>
-         Math.round(c * 255)
-            .toString(16)
-            .padStart(2, '0'),
-      )
-      .join('')}`;
+   return rgbToHex(r,g,b)
 }
 
-function isValidHexColor(hexColor: string): boolean {
+
+export function hlsToHex(h:number,s:number,l:number){
+   const complementaryHue = (h + 180) % 360;
+   const [r, g, b] = hlsToRgb(complementaryHue / 360, l / 100, s / 100);
+   return rgbToHex(r,g,b)
+}
+
+export function rgbToHex(r:number,g:number,b:number){
+   return `#${[r, g, b]
+         .map(c =>
+            Math.round(c * 255)
+               .toString(16)
+               .padStart(2, '0'),
+         )
+         .join('')}`;
+
+}
+
+export function isValidHexColor(hexColor: string): boolean {
    return /^#[0-9a-fA-F]{6}$/.test(hexColor);
 }
 
@@ -101,7 +113,7 @@ function getValidHexColor(hexColor: string): string | '' {
    return isValidHexColor(hexColor) ? hexColor : '';
 }
 
-function getContrastColorFromHex(hexColor: string): string | null {
+export function getContrastColorFromHex(hexColor: string): string | null {
    const validHexColor = getValidHexColor(hexColor);
    return validHexColor ? getContrastColor(validHexColor) : null;
 }
@@ -115,13 +127,7 @@ export function getNearbyColor(hexColor: string, degree: number): string | null 
    const [h, s, l] = hexToHsl(validHexColor);
    const nearbyHue = (h + degree) % 360;
    const [r, g, b] = hlsToRgb(nearbyHue / 360, l / 100, s / 100);
-   return `#${[r, g, b]
-      .map(c =>
-         Math.round(c * 255)
-            .toString(16)
-            .padStart(2, '0'),
-      )
-      .join('')}`;
+   return rgbToHex(r,g,b)
 }
 
 export function getComplementaryColor(hexColor: string): string | null {
@@ -133,13 +139,7 @@ export function getComplementaryColor(hexColor: string): string | null {
    const [h, s, l] = hexToHsl(validHexColor);
    const complementaryHue = (h + 180) % 360;
    const [r, g, b] = hlsToRgb(complementaryHue / 360, l / 100, s / 100);
-   return `#${[r, g, b]
-      .map(c =>
-         Math.round(c * 255)
-            .toString(16)
-            .padStart(2, '0'),
-      )
-      .join('')}`;
+   return rgbToHex(r,g,b)
 }
 
 /**
@@ -164,14 +164,7 @@ export function generateGradientColors(hexColor: string, numColors: number, step
          break;
       }
       const [r, g, b] = hlsToRgb(h / 360, s / 100, newL / 100);
-      const newHexColor = `#${[r, g, b]
-         .map(c =>
-            Math.round(c * 255)
-               .toString(16)
-               .padStart(2, '0'),
-         )
-         .join('')}`;
-      colors.push(newHexColor);
+      colors.push(rgbToHex(r,g,b));
    }
 
    return colors;

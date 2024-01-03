@@ -75,6 +75,18 @@ export function isNumber(val: unknown): val is number {
   return toString.call(val) === "[object Number]" && !isNaN(val);
 }
 
+export function isInteger(val: number): boolean {
+  if (isNumber(val) && !isNone(val)) {
+    return val % 1 === 0;
+  } else {
+    return false;
+  }
+}
+
+export function isFloat(val: number): boolean {
+  return !isInteger(val);
+}
+
 /**
  * check if an object is a BigInt type
  * @param  {unknown} val the target object
@@ -179,8 +191,18 @@ export function isThat<T>(val: unknown, typeobject: { new (): T }): val is T {
 /**
  * check if an object is default value is true otherwise is false
  * @param {unknown} val the value to be checked
+ * ```ts
+ * const s = undefined
+ * isZeroValue(s) // true
+ * const a = []
+ * isZeroValue(a) // true
+ * const str = ""
+ * isZeroValue(str) // true
+ * const o = {}
+ * isSeroValue(o) // true
+ * ```
  */
-export function isZero(val: unknown) {
+export function isZeroValue(val: unknown) {
   if (isArray(val)) {
     return JSON.stringify(val) === "[]";
   } else if (isObject(val)) {
@@ -191,6 +213,10 @@ export function isZero(val: unknown) {
     return val.size === 0;
   } else if (isString(val)) {
     return val === "";
+  } else if (isNumber(val) && val === 0) {
+    return true;
+  } else if (isUndefined(val) || isNull(val)) {
+    return true;
   } else {
     return false;
   }

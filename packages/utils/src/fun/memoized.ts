@@ -1,4 +1,4 @@
-import { isObject } from "@/typeis";
+import { isObject } from "..";
 
 /**
  * Creates a memoized function that caches the result of a promise-based callback on successful execution.

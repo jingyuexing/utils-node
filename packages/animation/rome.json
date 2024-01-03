@@ -1,0 +1,35 @@
+{
+    "$schema": "https://docs.rome.tools/schemas/12.1.3/schema.json",
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentSize": 2,
+        "lineWidth": 120
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "nursery": {
+                "useCamelCase": "warn"
+            },
+            "suspicious":{
+                "noShadowRestrictedNames":"off",
+                "noSelfCompare":"error",
+                "noExplicitAny":"off"
+            },
+            "style": {
+                "noParameterAssign":"off",
+                "useBlockStatements":"warn",
+                "recommended": true,
+                "useSingleVarDeclarator":"off"
+            }
+        }
+    },
+    "files": {
+        "ignore": [
+            "coverage/*",
+            "dist/*",
+            "html/*"
+        ]
+    }
+}

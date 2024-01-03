@@ -8,7 +8,7 @@
     "utils:ui": "cd packages/utils && pnpm run test:ui"
   },
   "dependencies": {
-    "typescript":"4.9.5"
+    "typescript": "4.9.5"
   },
   "keywords": [],
   "author": "",

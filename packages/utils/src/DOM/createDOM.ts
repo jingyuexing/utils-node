@@ -5,6 +5,7 @@ interface DOMTree {
    tag: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
    className?: string;
    attributes?: Record<string, any>;
+   variable?:Record<`--${string}`,number|string>
    style?: Partial<CSSStyleDeclaration>;
    children?: DOMTree[] | string | number;
 }
@@ -75,7 +76,7 @@ export function createDOM(...args: any[]) {
    const tree: DOMTree = args.length === 1 ? args[0].tree : args[1];
    const root: HTMLElement = args.length === 1 ? args[0].root : args[0];
    const style: CSSStyleDeclaration = args.length === 1 ? args[0].style : args[1].style;
-   const { tag, className = '', children = '', attributes = {} } = tree;
+   const { tag, className = '', children = '', attributes = {}, variable = {} } = tree;
    let ele: HTMLElement;
    hook.excuteEmits('onAttributesLoadBefore', attributes, undefined);
    if (className !== '') {
@@ -92,6 +93,11 @@ export function createDOM(...args: any[]) {
    if (!isEmpty(style)) {
       for (const key in style) {
          ele.style[key] = style[key];
+      }
+   }
+   if(!isEmpty(variable)){
+      for(const preperty in variable){
+         ele.style.setProperty(preperty,`${variable[preperty as keyof DOMTree['variable']]}`)
       }
    }
    if (typeof children === 'string' || typeof children === 'number') {

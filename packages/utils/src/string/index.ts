@@ -97,3 +97,63 @@ export function padEnd(target: string, char: string, num: number) {
    }
    return back;
 }
+
+
+function buildPartialMatchTable(pattern: string): number[] {
+  const table: number[] = [];
+  let i = 0;
+  let j = 1;
+
+  table[0] = 0; // 部分匹配表的第一个位置总是0
+
+  while (j < pattern.length) {
+    if (pattern[i] === pattern[j]) {
+      // 当前字符匹配成功，下一个位置的部分匹配值为当前位置值加1
+      table[j] = i + 1;
+      i++;
+      j++;
+    } else {
+      if (i !== 0) {
+        // 当前字符匹配失败，回溯到上一个匹配位置进行继续匹配
+        i = table[i - 1];
+      } else {
+        // i已经回溯到起始位置，当前字符匹配失败，继续下一个字符匹配
+        table[j] = 0;
+        j++;
+      }
+    }
+  }
+
+  return table;
+}
+
+function kmpSearch(text: string, pattern: string): number[] {
+  const positions: number[] = [];
+  const partialMatchTable = buildPartialMatchTable(pattern);
+  let i = 0; // text中当前字符的索引
+  let j = 0; // pattern中当前字符的索引
+
+  while (i < text.length) {
+    if (pattern[j] === text[i]) {
+      // 当前字符匹配成功，继续比较下一个字符
+      i++;
+      j++;
+
+      if (j === pattern.length) {
+        // 完全匹配，将匹配位置添加到结果中
+        positions.push(i - j);
+        j = partialMatchTable[j - 1];
+      }
+    } else {
+      if (j !== 0) {
+        // 当前字符匹配失败，回溯到上一个匹配位置进行继续匹配
+        j = partialMatchTable[j - 1];
+      } else {
+        // j已经回溯到起始位置，当前字符匹配失败，继续下一个字符匹配
+        i++;
+      }
+    }
+  }
+
+  return positions;
+}
