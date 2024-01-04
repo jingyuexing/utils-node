@@ -19,4 +19,11 @@ describe("convert testing",()=>{
    it("convert net speet unit test case",()=>{
       expect(netSpeed(300,"Kbps","Gbps"))
    })
+   it("test number convert",()=>{
+      const { numeralSystemConverter } = convert()
+      expect(numeralSystemConverter(1,"兆","京")).eq(0.1)
+      expect(numeralSystemConverter(1,"京","兆")).eq(10)
+      expect(numeralSystemConverter(1,"个","百")).eq(0.01)
+      expect(numeralSystemConverter(1,"百","个")).eq(100)
+   })
 })
