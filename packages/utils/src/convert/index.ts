@@ -22,9 +22,9 @@ export function convert() {
       mg: 0.001,
       t: 1000000,
     };
-    const unit = Object.keys(units)
-    if(unit.indexOf(from) === -1 || unit.indexOf(to) === -1){
-      throw new Error("Invalid weight unit")
+    const unit = Object.keys(units);
+    if (unit.indexOf(from) === -1 || unit.indexOf(to) === -1) {
+      throw new Error("Invalid weight unit");
     }
     return (value * units[from]) / units[to];
   };
@@ -34,6 +34,57 @@ export function convert() {
       w: 10000,
       m: 1000000,
     };
+    return (value * units[from]) / units[to];
+  };
+  /**
+   * Converts units of volume in the metric system.
+   * @param {number} value - The value to be converted.
+   * @param {"ml" | "cl" | "dl" | "l"} from - The unit to convert from ("ml": milliliters, "cl": centiliters, "dl": deciliters, "l": liters).
+   * @param {"ml" | "cl" | "dl" | "l"} to - The unit to convert to ("ml": milliliters, "cl": centiliters, "dl": deciliters, "l": liters).
+   * @returns {number} - The converted value.
+   */
+  const volume = (value: number, from: "ml" | "cl" | "dl" | "l", to: "ml" | "cl" | "dl" | "l") => {
+    const units = {
+      ml: 1,
+      cl: 10,
+      dl: 100,
+      l: 1000,
+    };
+
+    return (value * units[from]) / units[to];
+  };
+  /**
+   * Converts units of volume in the EN customary system.
+   * @param {number} value - The value to be converted.
+   * @param {"oz" | "pt" | "qt" | "gal"} from - The unit to convert from ("oz": ounces, "pt": pints, "qt": quarts, "gal": gallons).
+   * @param {"oz" | "pt" | "qt" | "gal"} to - The unit to convert to ("oz": ounces, "pt": pints, "qt": quarts, "gal": gallons).
+   * @returns {number} - The converted value.
+   */
+  const volumeEN = (value: number, from: "oz" | "pt" | "qt" | "gal", to: "oz" | "pt" | "qt" | "gal") => {
+    const units = {
+      oz: 1,
+      pt: 20,
+      qt: 40,
+      gal: 160,
+    };
+
+    return (value * units[from]) / units[to];
+  };
+  /**
+   * Converts units of volume in the US customary system.
+   * @param {number} value - The value to be converted.
+   * @param {"oz" | "pt" | "qt" | "gal"} from - The unit to convert from ("oz": ounces, "pt": pints, "qt": quarts, "gal": gallons).
+   * @param {"oz" | "pt" | "qt" | "gal"} to - The unit to convert to ("oz": ounces, "pt": pints, "qt": quarts, "gal": gallons).
+   * @returns {number} - The converted value.
+   */
+  const volumeUS = (value: number, from: "oz" | "pt" | "qt" | "gal", to: "oz" | "pt" | "qt" | "gal") => {
+    const units = {
+      oz: 1,
+      pt: 16,
+      qt: 32,
+      gal: 128,
+    };
+
     return (value * units[from]) / units[to];
   };
   type StorageUnit = "B" | "KB" | "MB" | "GB" | "TB" | "PB";
@@ -71,12 +122,93 @@ export function convert() {
 
     return (speed * fromFactor) / toFactor;
   };
-  type chineseUnit = "寸" | "分" | "寸";
+  const unitWords = [
+    "个",
+    "十",
+    "百",
+    "千",
+    "万",
+    "十万",
+    "百万",
+    "千万",
+    "亿",
+    "十亿",
+    "百亿",
+    "千亿",
+    "兆",
+    "十兆",
+    "百兆",
+    "千兆",
+    "京",
+    "十京",
+    "百京",
+    "千京",
+    "垓",
+    "十垓",
+    "百垓",
+    "千垓",
+    "秭",
+    "十秭",
+    "百秭",
+    "千秭",
+    "穰",
+    "十穰",
+    "百穰",
+    "千穰",
+    "沟",
+    "十沟",
+    "百沟",
+    "千沟",
+    "涧",
+    "十涧",
+    "百涧",
+    "千涧",
+    "正",
+    "十正",
+    "百正",
+    "千正",
+    "载",
+    "十载",
+    "百载",
+    "千载",
+    "极",
+    "十极",
+    "百极",
+    "千极",
+    "恒河沙",
+    "阿僧祇",
+    "那由他",
+    "不可思议",
+    "无量大数",
+  ] as const;
+  /**
+   * [numeralSystemConverter description]
+   * @param {number} value
+   * @param {"个"|"十"|"百"|"千"|"万"|"亿"|"兆"|"京"|"垓"|"秭"|"穰"|"沟"|"涧"|"正"|"载"|"极"|"恒河沙"|"阿僧祇"|"那由他"|"不可思议"|"无量大数"} from The unit to convert from
+   * @param {"个"|"十"|"百"|"千"|"万"|"亿"|"兆"|"京"|"垓"|"秭"|"穰"|"沟"|"涧"|"正"|"载"|"极"|"恒河沙"|"阿僧祇"|"那由他"|"不可思议"|"无量大数"} to The unit to convert to
+   */
+  function numeralSystemConverter(value: number, from: typeof unitWords[number], to: typeof unitWords[number]) {
+    const fromIndex = unitWords.indexOf(from);
+    const toIndex = unitWords.indexOf(to);
+
+    if (fromIndex === -1 || toIndex === -1) {
+      return -1;
+    }
+
+    const exponent = Math.abs(fromIndex - toIndex);
+    const multiplier = fromIndex > toIndex ? Math.pow(10, exponent) : 1 / Math.pow(10, exponent);
+
+    return value * multiplier;
+  }
   return {
     length,
     weight,
     size,
     storage,
     netSpeed,
+    volume,
+    volumeEN,
+    volumeUS,
+    numeralSystemConverter,
   };
 }
