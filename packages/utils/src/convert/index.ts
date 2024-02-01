@@ -184,15 +184,16 @@ export function convert() {
  * @param {number} number 要转换的数字。
  * @param {number} [base=10] 数字的进制，默认为十进制。
  * @param {boolean} [upper=false] 是否使用大写中文数字，默认为小写。
+ * @param {boolean} [trans=false] 是否将二十转为廿
  * @returns {string} 转换后的中文数字字符串。
  */
-export function toChineseNumber(number: number, base: number = 10, upper: boolean = false): string {
+export function toChineseNumber(number: number, base: number = 10, upper: boolean = false, trans = false): string {
    let digits: string[] = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
-   let units: string[] = ["", "十", "百", "千", "万", "亿"];
+   let units: string[] = ["", "十", "百", "千", "万", "亿", "兆", "京", "垓", "秭", "穰", "沟", "涧", "正", "载", "极"];
 
    if (upper) {
       digits = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"];
-      units = ["", "拾", "佰", "仟", "萬", "亿"];
+      units = ["", "拾", "佰", "仟", "萬", "亿", "兆", "京", "垓", "秭", "穰", "沟", "涧", "正", "载", "极"];
    }
 
    let result = "";
@@ -208,7 +209,7 @@ export function toChineseNumber(number: number, base: number = 10, upper: boolea
    while (quotient > 0) {
       const remainder = quotient % base;
       if (remainder > 0 || idx === 0 || (idx === 1 && quotient % 10 === 0)) {
-         if (idx === 1 && (remainder === 2 || remainder === 3)) {
+         if (trans && idx === 1 && (remainder === 2 || remainder === 3)) {
             if (remainder === 2) {
                result = "廿" + result;
             }
@@ -218,7 +219,7 @@ export function toChineseNumber(number: number, base: number = 10, upper: boolea
          } else {
             if (remainder === 0 && idx > 0) {
                result = digits[remainder] + result;
-            } else if (unitIndex / 4  > 1) {
+            } else if (unitIndex / 4 > 1) {
                // composeUnidex ++
                result = digits[remainder] + (units[composeUnidex]) + result;
             } else {
@@ -246,4 +247,40 @@ function removeTrailingZero(str: string): string {
       str = str.slice(0, -1);
    }
    return str;
+}
+
+function numberStringCallback(remainder: number, unit: number): [remainder: string, unit: string, digitsLength: number] {
+   const numberMap = {
+      "number": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-$".split(''),
+   }
+   return [numberMap['number'][remainder], "", numberMap['number'].length]
+}
+
+/**
+ * [numberToString description]
+ * @param  {number}    number   需要转换的数字
+ * @param  {number}    [base=10]     转换进制
+ * @param  {(remainder: number, unit: number)=>[remainder: string, unit: string, digits: number]} [callback=numberStringCallback] 数字字符串格式化函数
+ * @return {string}  转换结果
+ */
+export function numberToString(number: number, base: number = 10, callback: typeof numberStringCallback = numberStringCallback): string {
+   let quotient = Math.abs(number)
+   let [, , digitsLength] = callback(0, 0)
+   if (base > digitsLength) {
+      return ""
+   }
+   let result = ""
+   let unitIndex = 0
+   while (quotient > 0) {
+      let remainder = quotient % base
+      let [digits, unit] = callback(remainder, unitIndex)
+      result = digits + unit + result
+      quotient = Math.floor(quotient / base)
+      unitIndex++;
+   }
+   if (number < 0) {
+      return "-" + result
+   } else {
+      return result
+   }
 }

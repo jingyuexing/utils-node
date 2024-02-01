@@ -1,4 +1,4 @@
-import { convert , toChineseNumber } from '@/convert';
+import { convert , numberToString, toChineseNumber } from '@/convert';
 import { describe, expect, it } from 'vitest';
 
 describe("convert testing",()=>{
@@ -27,10 +27,10 @@ describe("convert testing",()=>{
       expect(numeralSystemConverter(1,"百","个")).eq(100)
    })
    it("test to chinese number",()=>{
-      expect(toChineseNumber(123)).eq("一百廿三")
+      expect(toChineseNumber(123)).eq("一百二十三")
       expect(toChineseNumber(100)).eq("一百")
-      expect(toChineseNumber(20)).eq("廿")
-      expect(toChineseNumber(21)).eq("廿一")
+      expect(toChineseNumber(20)).eq("二十")
+      expect(toChineseNumber(21)).eq("二十一")
       expect(toChineseNumber(101)).eq("一百零一")
       expect(toChineseNumber(1001)).eq("一千零一")
       expect(toChineseNumber(10001)).eq("一万零一")
@@ -54,5 +54,27 @@ describe("convert testing",()=>{
       expect(toChineseNumber(2893_3689,10,true)).eq("贰仟捌佰玖拾叁萬叁仟陆佰捌拾玖")
       // expect(toChineseNumber(8_2893_3689,10,true)).eq("捌亿贰仟捌佰玖拾叁萬叁仟陆佰捌拾玖") // not pass
       // expect(toChineseNumber(88_2893_3689,10,true)).eq("捌拾捌亿贰仟捌佰玖拾叁萬叁仟陆佰捌拾玖") // not pass
+   })
+
+   it("testing number to string",()=>{
+      expect(numberToString(100)).eq("100")
+      expect(numberToString(900)).eq("900")
+      expect(numberToString(100000000000000000000)).eq("100000000000000000000")
+      expect(numberToString(255,16)).eq("ff")
+      expect(numberToString(16,16)).eq("10")
+      expect(numberToString(10,16)).eq("a")
+      expect(numberToString(11,16)).eq("b")
+      expect(numberToString(12,16)).eq("c")
+      expect(numberToString(13,16)).eq("d")
+      expect(numberToString(14,16)).eq("e")
+      expect(numberToString(15,16)).eq("f")
+      expect(numberToString(88,16)).eq("58")
+      expect(numberToString(88,26)).eq("3a")
+      expect(numberToString(19336820,26)).eq("1g84jm")
+      expect(numberToString(255,2)).eq("11111111")
+      expect(numberToString(3,3)).eq("10")
+      expect(numberToString(2,3)).eq("2")
+      expect(numberToString(88,3)).eq("10021")
+      expect(numberToString(1999999999368209,40)).eq("7p719Du559")
    })
 })
