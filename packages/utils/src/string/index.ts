@@ -157,3 +157,21 @@ function kmpSearch(text: string, pattern: string): number[] {
 
   return positions;
 }
+
+/**
+ * [camelToKebab description]
+ * @param  {string} camelStr [description]
+ * @return {string}          [description]
+ */
+export function camelToKebab(camelStr: string): string {
+    const result: string[] = [camelStr[0].toLowerCase()];
+    for (let i = 1; i < camelStr.length; i++) {
+        const char = camelStr[i];
+        if (char.toUpperCase() === char) {
+            result.push('-', char.toLowerCase());
+        } else {
+            result.push(char);
+        }
+    }
+    return result.join('');
+}
