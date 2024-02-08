@@ -284,3 +284,27 @@ export function numberToString(number: number, base: number = 10, callback: type
       return result
    }
 }
+
+function stringToNumberCallback(digits:string):number{
+   let _digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-$".split("")
+   return _digits.indexOf(digits)
+}
+
+/**
+ * [numberToString description]
+ * @param  {number}    number   需要转换的字符串
+ * @param  {number}    [base=10]     转换进制
+ * @param  {(digits:string)=>number} [callback=stringToNumberCallback] 字符串格式化函数
+ * @return {number}  转换结果
+ */
+export function stringToNumber(str:string,base=10,callback=stringToNumberCallback){
+   let result = 0
+   let power = 1
+   let number = str.split("")
+   for(let i = number.length;i>0;i--){
+      let val = callback(number[i-1])
+      result += (val * power)
+      power *= base
+   }
+   return result
+}

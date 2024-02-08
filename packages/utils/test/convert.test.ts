@@ -1,4 +1,4 @@
-import { convert , numberToString, toChineseNumber } from '@/convert';
+import { convert , numberToString, stringToNumber, toChineseNumber } from '@/convert';
 import { describe, expect, it } from 'vitest';
 
 describe("convert testing",()=>{
@@ -76,5 +76,21 @@ describe("convert testing",()=>{
       expect(numberToString(2,3)).eq("2")
       expect(numberToString(88,3)).eq("10021")
       expect(numberToString(1999999999368209,40)).eq("7p719Du559")
+      expect(numberToString(1999999999368209,40)).eq("7p719Du559")
+   })
+   it("testing string to number",()=>{
+      expect(stringToNumber("100")).eq(100)
+      expect(stringToNumber("200")).eq(200)
+      expect(stringToNumber("400")).eq(400)
+      expect(stringToNumber("f",16)).eq(15)
+      expect(stringToNumber("1g84jm",26)).eq(19336820)
+      expect(stringToNumber("7p719Du559",40)).eq(1999999999368209)
+      expect(stringToNumber("8888",40)).eq(525128)
+      expect(stringToNumber("90",40)).eq(360)
+      expect(stringToNumber("ff",16)).eq(255)
+      expect(stringToNumber("111",2)).eq(7)
+      expect(stringToNumber("1111",2)).eq(15)
+      expect(stringToNumber("12",15)).eq(17)
+      expect(stringToNumber("a",15)).eq(10)
    })
 })
