@@ -66,7 +66,7 @@ export function format(...args: any[]): string {
 export function AnyToString(val: any): string {
    let covertString = '';
    const objCache: any = {};
-   if(isEmpty(val)){return covertString}
+   if (isEmpty(val)) { return covertString }
    if (isMap(val)) {
       val.forEach((value, key) => {
          objCache[key as string] = value;
@@ -74,7 +74,7 @@ export function AnyToString(val: any): string {
       covertString = JSON.stringify(objCache);
    } else if (isObject(val) || isArray(val)) {
       covertString = JSON.stringify(val);
-   }  else {
+   } else {
       return `${val}`;
    }
    return covertString;
@@ -96,4 +96,27 @@ export function padEnd(target: string, char: string, num: number) {
       return back + pading.join('');
    }
    return back;
+}
+
+function isInRange(char:string,range:[begin:number,end:number]){
+   let [begin,end] = range;
+   for (let i = 0; i < char.length; i++) {
+      if (!(begin <= char.charCodeAt(i) && char.charCodeAt(i) <= end)) {
+         return false
+      }
+   }
+   return true
+}
+
+
+export function isNumberic(char: string) {
+   return isInRange(char,[48,57])
+}
+
+export function isUpper(char: string) {
+   return isInRange(char,[65,90])
+}
+
+export function isLower(char: string) {
+   return isInRange(char,[97,122])
 }

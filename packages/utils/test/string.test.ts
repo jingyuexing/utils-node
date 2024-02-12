@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseCertString, format, AnyToString } from "@/string";
+import { parseCertString, format, AnyToString, isUpper, isNumberic, isLower } from "@/string";
 describe("parse module testing case", () => {
   it("test cert string", () => {
     const cert = parseCertString("C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org");
@@ -44,4 +44,22 @@ describe("parse module testing case", () => {
     expect(AnyToString(12)).eq("12");
     expect(AnyToString(889)).eq("889");
   });
+
+  it("testing isUpper",()=>{
+   expect(isUpper("THEWONDERFULWORLD")).eq(true)
+   expect(isUpper("thewonderfulworld")).eq(false)
+  })
+
+  it("testing isNumberic",()=>{
+   expect(isNumberic("123000")).eq(true)
+   expect(isNumberic("123000X")).eq(false)
+   expect(isNumberic("123000Y")).eq(false)
+   expect(isNumberic("12,3000Y")).eq(false)
+  })
+
+  it("testing isLower",()=>{
+   expect(isLower("convert")).eq(true)
+   expect(isLower("CONVERT")).eq(false)
+   expect(isLower("134690")).eq(false)
+  })
 });
