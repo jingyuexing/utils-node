@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseCertString, format, AnyToString } from "@/string";
+import { parseCertString, format, AnyToString, getPathValue } from "@/string";
 describe("parse module testing case", () => {
   it("test cert string", () => {
     const cert = parseCertString("C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org");
@@ -30,6 +30,17 @@ describe("parse module testing case", () => {
     ).eq("/user/v/4399");
     expect(format("/user/{name}/{uid}", map)).eq("/user/Jim/13998026");
   });
+
+  it("testing getPathValue",()=>{
+   let obj = getPathValue("/user/{name}/{uid}","/user/Jim/13998026")
+   expect(obj['name']).eq("Jim")
+   expect(obj['uid']).eq(13998026)
+
+   let pathValue = getPathValue("/user/{name}/{uid}","/user/Wold Nice/0xcef2396ec3")
+   expect(pathValue['name']).eq("Wold Nice")
+   expect(pathValue['uid']).eq("0xcef2396ec3")
+  })
+
   it("testing anyToString", () => {
     const map = new Map<string, any>();
     map.set("a", "gf");
