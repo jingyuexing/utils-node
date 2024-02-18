@@ -1,5 +1,6 @@
 import { Dict } from '../types';
-import { isArray, isEmpty, isMap, isNumber, isObject } from '../typeis';
+import { isArray, isEmpty, isMap, isObject } from '../typeis';
+import { nestedObject } from '../object';
 // C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org
 export function parseCertString(cert: string): Dict<string, string> {
    const certObj = Object.create(null);
@@ -62,10 +63,29 @@ export function format(...args: any[]): string {
    }
    return urlBacks;
 }
+// like "{variable} {name}" will be return ["variable","name"]
+export function findVariable(text: string, delimiter: string) {
+   if ((delimiter.length & 1) === 0) {
+   }
+   let variableName = []
+   for (let char of text) {
+      let notBlank = char.trim()
+      let name = "";
+      let findit = false
+      if (notBlank !== "") {
+         if (notBlank == delimiter[0] || notBlank == delimiter[1]) {
+            findit = !findit
+            continue
+         }
+         if (findit) {
+            name = name + char
+         }
+      }
+   }
+}
 
-
-function isInRange(char:string,range:[begin:number,end:number]){
-   let [begin,end] = range;
+function isInRange(char: string, range: [begin: number, end: number]) {
+   let [begin, end] = range;
    for (let i = 0; i < char.length; i++) {
       if (!(begin <= char.charCodeAt(i) && char.charCodeAt(i) <= end)) {
          return false
@@ -76,15 +96,15 @@ function isInRange(char:string,range:[begin:number,end:number]){
 
 
 export function isNumberic(char: string) {
-   return isInRange(char,[48,57])
+   return isInRange(char, [48, 57])
 }
 
 export function isUpper(char: string) {
-   return isInRange(char,[65,90])
+   return isInRange(char, [65, 90])
 }
 
 export function isLower(char: string) {
-   return isInRange(char,[97,122])
+   return isInRange(char, [97, 122])
 }
 
 function pathParser(path: string) {
@@ -104,12 +124,12 @@ function pathParser(path: string) {
    return val
 }
 
-export function getPathValue(raw:string,real:string){
+export function getPathValue(raw: string, real: string) {
    let _raw = pathParser(raw)
    let _real = pathParser(real)
-   let val = Object.create(null) as Record<string,string|number>
-   for(let i = 0;i < _raw.length;i++){
-      if(_raw[i] !== _real[i]){
+   let val = Object.create(null) as Record<string, string | number>
+   for (let i = 0; i < _raw.length; i++) {
+      if (_raw[i] !== _real[i]) {
          val[_raw[i]] = isNumberic(_real[i]) ? parseInt(_real[i]) : _real[i]
       }
    }
@@ -229,14 +249,91 @@ export function camelToKebab(camelStr: string): string {
    return result.join('');
 }
 
-export function toUnit<Unit extends string>(val:number,unit:Unit){
+export function toUnit<Unit extends string>(val: number, unit: Unit) {
    return `${val}${unit}` as `${number}${Unit}`
 }
 
-export function toPixel(val:number){
-   return toUnit(val,"px")
+export function toPixel(val: number) {
+   return toUnit(val, "px")
 }
 
-export function toPercent(val:number){
-   return toUnit(val,"%")
+export function toPercent(val: number) {
+   return toUnit(val, "%")
+}
+
+export function isAlphabet(char: string) {
+   return isUpper(char) || isLower(char)
+}
+
+export function isAlphanum(char: string) {
+   return isAlphabet(char) || isNumberic(char)
+}
+/**
+ * [string description]
+ * @type {[type]}
+ */
+export function referenceString<T extends Record<string, string>, S extends string>(
+   target: T,
+   refrenceSymbol: S = "@" as S
+): [{ readonly [K in keyof T]: T[K] }, (text: string) => string] {
+
+   const getAlphabet = (text: string, delimiter: string[] = [".", "/"]) => {
+      let word: string[] = []
+      for (let char of text) {
+         if (char !== refrenceSymbol && char.trim() !== "") {
+            if (isAlphanum(char) || delimiter.includes(char)) {
+               word.push(char)
+            } else if (char.charCodeAt(0) > 0xff) {
+               word.push(char)
+            }
+         }
+      }
+      return word.join("")
+   }
+   const replaceSymbol = (text: string, symol: `${typeof refrenceSymbol}${keyof T & string}`, value: string) => {
+      let text_ = text
+      while (text_.includes(symol)) {
+         text_ = text_.replace(symol, value)
+      }
+      return text_
+   }
+
+   const deepReplace = (text: string) => {
+      let textClone = text;
+      let rawList = textClone.split(" ")
+      for (let i = 0; i < rawList.length; i++) {
+         var token = rawList[i];
+         if (!textClone.includes(refrenceSymbol)) {
+            break
+         }
+         if (token.includes(refrenceSymbol)) {
+            let refrence = token
+               .split(refrenceSymbol)
+               .filter((val) => val !== "")
+            refrence.forEach((ref) => {
+               let validRef = getAlphabet(ref)
+               let values = deepReplace(nestedObject(target, validRef))
+               textClone = replaceSymbol(textClone, `${refrenceSymbol}${validRef as T & string}`, values)
+            })
+         }
+      }
+      return textClone;
+   }
+   const replaceReference = (attribute: keyof T) => {
+      let rawstring = target[attribute]
+      return deepReplace(rawstring)
+   }
+
+   const values = Object.create(null)
+   Object.keys(target).forEach((keys) => {
+      Object.defineProperty(values, keys, {
+         get() {
+            return replaceReference(keys)
+         }
+      })
+   })
+   let parser = (text: string): string => {
+      return deepReplace(text)
+   }
+   return [values as unknown as { [K in keyof T]: T[K] }, parser]
 }
