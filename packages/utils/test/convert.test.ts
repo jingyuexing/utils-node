@@ -1,4 +1,5 @@
 import { convert , numberToString, stringToNumber, toChineseNumber } from '@/convert';
+import { toUnit } from '@/string';
 import { describe, expect, it } from 'vitest';
 
 describe("convert testing",()=>{
@@ -92,5 +93,22 @@ describe("convert testing",()=>{
       expect(stringToNumber("1111",2)).eq(15)
       expect(stringToNumber("12",15)).eq(17)
       expect(stringToNumber("a",15)).eq(10)
+   })
+
+   it("testing chineseMoneyUnit",()=>{
+      function log(val:number,from:string,to:string){
+         console.log(toUnit(val,from),"<=>",toUnit(chineseMoneyUnit(val,from,to),to))
+      }
+      const { chineseMoneyUnit } = convert()
+      expect(chineseMoneyUnit(1,"两","钱")).eq(10)
+      expect(chineseMoneyUnit(1000,"钱","两")).eq(100)
+      expect(chineseMoneyUnit(10,"两","钱")).eq(100)
+      expect(chineseMoneyUnit(1,"贯","钱")).eq(1000)
+      expect(chineseMoneyUnit(1,"钱","分")).eq(10)
+      expect(chineseMoneyUnit(1,"分","厘")).eq(10)
+      log(10,"贯","两")
+      log(100,"贯","两")
+      log(1,"贯","文")
+      log(13000,"文","贯")
    })
 })

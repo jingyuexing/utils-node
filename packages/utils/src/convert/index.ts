@@ -165,6 +165,14 @@ export function convert() {
 
       return value * multiplier;
    }
+   const MoneyUnit = ["贯","两","文","钱","分","厘"] as const
+   function chineseMoneyUnit(val:number,from:typeof MoneyUnit[number],to:typeof MoneyUnit[number]){
+      if(!(MoneyUnit.includes(from) && MoneyUnit.includes(to))){
+         return -1
+      }
+      const unit = [100,1,0.1,0.1,0.01,0.001]
+      return (val * unit[MoneyUnit.indexOf(from)]) / unit[MoneyUnit.indexOf(to)]
+   }
    return {
       length,
       weight,
@@ -175,6 +183,7 @@ export function convert() {
       volumnEN,
       volumeUS,
       numeralSystemConverter,
+      chineseMoneyUnit
    };
 }
 
