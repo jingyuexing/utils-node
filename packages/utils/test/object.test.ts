@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { entries, Extends, exclude, renameKey, traverseObject, OmitObjectKeys, PickObjectKeys } from "@/object";
+import { entries, Extends, exclude, renameKey, traverseObject, OmitObjectKeys, PickObjectKeys, objectFilter, settingZeroValue as settingZeroValue, nestedObject } from "@/object";
+import { isString } from "..";
 
 describe("object testing", () => {
   it("test entries", () => {
@@ -181,6 +182,72 @@ describe("object testing", () => {
    },["name"])
    expect(Object.keys(pickObj).includes("name")).eq(true)
    expect(Object.keys(pickObj).includes("other")).eq(false)
+  })
+
+  it("test objectFilter",()=>{
+   const obj = objectFilter({
+      name:"",
+      gender:"",
+      AOL:12
+   },(key,value)=>{
+      return isString(value) ? value.length > 10 : value > 10
+   })
+   expect((obj as any)['name']).eq(undefined)
+   expect((obj as any)['AOL']).eq(12)
+  })
+
+  it("testing zeroValue",()=>{
+   const obj = {
+      name:"",
+      age:0,
+      address:"",
+      tags:[],
+      others:{},
+      people:{
+         some:"thing"
+      }
+   }
+   let result = settingZeroValue(obj,{
+      string:"N/A",
+      number:-1,
+      array:[0,0,0,0],
+      object:{
+         ["unknown"]:true
+      }
+   })
+
+   expect(result["name"]).eq("N/A")
+   expect(result["name"]).eq("N/A")
+   expect(result["age"]).eq(-1)
+   expect(result["tags"].length).eq(4)
+   expect((result["others"] as any)["unknown"]).eq(true)
+   expect((result["people"] as any)["unknown"]).eq(undefined)
+  })
+
+  it("testing nestObject",()=>{
+   const obj = {
+      a:{
+         b:{
+            kol:{
+               final:12
+            }
+         },
+         x:{
+            m:[true,false,"some"]
+         },
+         o:{
+            l:"N/A",
+            k:"UNKNOW"
+         }
+      }
+   }
+   expect(nestedObject(obj,"a.b.kol.final")).eq(12)
+   expect(nestedObject(obj,"a.x.m.0")).eq(true)
+   expect(nestedObject(obj,"a.x.m.1")).eq(false)
+   expect(nestedObject(obj,"a_x_m_2","_")).eq("some")
+   expect(nestedObject(obj,"a_x_m_2","_")).eq("some")
+   expect(nestedObject(obj,"a/o/l","/")).eq("N/A")
+   expect(nestedObject(obj,"a/o/k","/")).eq("UNKNOW")
   })
 });
 
