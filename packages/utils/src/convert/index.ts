@@ -260,7 +260,7 @@ function removeTrailingZero(str: string): string {
 
 function numberStringCallback(remainder: number, unit: number): [remainder: string, unit: string, digitsLength: number] {
    const numberMap = {
-      "number": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-$".split(''),
+      "number": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-$".split(''),
    }
    return [numberMap['number'][remainder], "", numberMap['number'].length]
 }
@@ -295,7 +295,7 @@ export function numberToString(number: number, base: number = 10, callback: type
 }
 
 function stringToNumberCallback(digits:string):number{
-   let _digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-$".split("")
+   let _digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-$".split("")
    return _digits.indexOf(digits)
 }
 
