@@ -353,3 +353,116 @@ export function referenceString<T extends Record<string, string>, S extends stri
    }
    return [values as unknown as { [K in keyof T]: T[K] }, parser]
 }
+
+export function isAlphabet(char: string) {
+   return isUpper(char) || isLower(char)
+}
+
+export function isAlphanum(char: string) {
+   return isAlphabet(char) || isNumberic(char)
+}
+/**
+ * [string description]
+ * @type {[type]}
+ */
+export function referenceString<T extends Record<string, string>, S extends string>(
+   target: T,
+   refrenceSymbol: S = "@" as S
+): [{ readonly [K in keyof T]: T[K] }, (text: string) => string] {
+
+   const getAlphabet = (text: string, delimiter: string[] = [".", "/"]) => {
+      let word: string[] = []
+      for (let char of text) {
+         if (char !== refrenceSymbol && char.trim() !== "") {
+            if (isAlphanum(char) || delimiter.includes(char)) {
+               word.push(char)
+            } else if (char.charCodeAt(0) > 0xff) {
+               word.push(char)
+            }
+         }
+      }
+      return word.join("")
+   }
+   const replaceSymbol = (text: string, symol: `${typeof refrenceSymbol}${keyof T & string}`, value: string) => {
+      let text_ = text
+      while (text_.includes(symol)) {
+         text_ = text_.replace(symol, value)
+      }
+      return text_
+   }
+
+   const deepReplace = (text: string) => {
+      let textClone = text;
+      let rawList = textClone.split(" ")
+      for (let i = 0; i < rawList.length; i++) {
+         var token = rawList[i];
+         if (!textClone.includes(refrenceSymbol)) {
+            break
+         }
+         if (token.includes(refrenceSymbol)) {
+            let refrence = token
+               .split(refrenceSymbol)
+               .filter((val) => val !== "")
+            refrence.forEach((ref) => {
+               let validRef = getAlphabet(ref)
+               let values = deepReplace(nestedObject(target, validRef))
+               textClone = replaceSymbol(textClone, `${refrenceSymbol}${validRef as T & string}`, values)
+            })
+         }
+      }
+      return textClone;
+   }
+   const replaceReference = (attribute: keyof T) => {
+      let rawstring = target[attribute]
+      return deepReplace(rawstring)
+   }
+
+   const values = Object.create(null)
+   Object.keys(target).forEach((keys) => {
+      Object.defineProperty(values, keys, {
+         get() {
+            return replaceReference(keys)
+         }
+      })
+   })
+   let parser = (text: string): string => {
+      return deepReplace(text)
+   }
+   return [values as unknown as { [K in keyof T]: T[K] }, parser]
+}
+
+export function findVariableNames(text: string, formatSymbol: string = "{}") {
+   let leftSymbol = "";
+   let rightSymbol = "";
+   if ((formatSymbol.length & 1) == 0) {
+      leftSymbol = formatSymbol[0]
+      rightSymbol = formatSymbol[1]
+   } else {
+      leftSymbol = formatSymbol[0]
+   }
+   let variableNames: string[] = []
+   let idx = 0;
+   while (idx < text.length) {
+      let variableName: string[] = []
+      if(!text.slice(idx).includes(rightSymbol)){
+         break
+      }
+      if (text[idx] == leftSymbol) {
+         let n = idx + 1
+         while (n < text.length) {
+            if (rightSymbol !== "" && text[n] == rightSymbol) {
+               break
+            } else if (text[n] === " " || !isAlphanum(text[n])) {
+               break
+            }
+            variableName.push(text[n])
+            n++;
+         }
+         variableNames.push(variableName.join(""))
+         variableName = []
+         idx = n;
+      }
+      idx++
+   }
+   return variableNames;
+}
