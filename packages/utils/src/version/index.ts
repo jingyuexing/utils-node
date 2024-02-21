@@ -9,12 +9,9 @@ interface Version {
 }
 
 type VersionString =
-  | `${number}.${number}.${number}`
-  | `${number}.${number}.${number}.${number}`
-  | `${number}.${number}.${number}.${number}-${"alpha" | "beta"}`
-  | `v${number}.${number}.${number}`
-  | `v${number}.${number}.${number}.${number}`
-  | `v${number}.${number}.${number}.${number}-${"alpha" | "beta"}`;
+  | `${''|'v'}${number}.${number}.${number}`
+  | `${''|'v'}${number}.${number}.${number}.${number}`
+  | `${''|'v'}${number}.${number}.${number}.${number}-${"alpha" | "beta"}`
 
 // the version regexp
 const versionRE =
