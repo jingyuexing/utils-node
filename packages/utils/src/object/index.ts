@@ -94,43 +94,46 @@ export function objectPath<T extends { [key: string | number]: any }, K extends 
 
 
 type NestedPath<T extends string> = T extends `${infer First}.${infer Rest}`
-  ? First extends string
-    ? { [K in First]: NestedPath<Rest> }
-    : never
-  : T extends string
-  ? { [K in T]: any }
-  : never;
+   ? First extends string
+   ? { [K in First]: NestedPath<Rest> }
+   : never
+   : T extends string
+   ? { [K in T]: any }
+   : never;
 
 export function createNestedObject<T extends string>(str: T, value: string, delimiter = "."): NestedPath<T> {
-  const keys = str.split(delimiter) as (keyof NestedPath<T>)[];
+   const keys = str.split(delimiter) as (keyof NestedPath<T>)[];
 
-  const lastIndex = keys.length - 1;
-  const nestedObject = {} as NestedPath<T>;
+   const lastIndex = keys.length - 1;
+   const nestedObject = {} as NestedPath<T>;
 
-  keys.reduce((obj, key, index) => {
-    if (index === lastIndex) {
-      (obj as any)[key] = value;
-    } else {
-      (obj as any)[key] = obj[key] || {};
-    }
-    return obj[key] as NestedPath<T>;
-  }, nestedObject);
+   keys.reduce((obj, key, index) => {
+      if (index === lastIndex) {
+         (obj as any)[key] = value;
+      } else {
+         (obj as any)[key] = obj[key] || {};
+      }
+      return obj[key] as NestedPath<T>;
+   }, nestedObject);
 
-  return nestedObject;
+   return nestedObject;
 }
 
-export function nestedObject(target: object, path: string, cb: (target: any, key: string) => void): void {
-  const keys: string[] = path.split(".");
-  let currentTarget: any = target;
+export function nestedObject(target: object, path: string,delimiter:string=".",cb?: (target: any, key: string) => void): any {
+   const keys: string[] = path.split(delimiter);
+   let currentTarget: any = target;
 
-  for (const key of keys) {
-    if (isObject(currentTarget) && currentTarget.hasOwnProperty(key)) {
-      currentTarget = currentTarget[key];
-      cb(currentTarget, key);
-    } else {
-      throw new Error("Unreachable access path");
-    }
-  }
+   for (const key of keys) {
+      if ((isArray(currentTarget) || isObject(currentTarget)) && Object.keys(currentTarget).indexOf(key) !== -1) {
+         currentTarget = (currentTarget as any)[key];
+         if(cb){
+            cb(currentTarget, key);
+         }
+      } else {
+         throw new Error("Unreachable access path");
+      }
+   }
+   return currentTarget
 }
 
 /**
