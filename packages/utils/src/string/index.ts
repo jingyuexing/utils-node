@@ -63,26 +63,6 @@ export function format(...args: any[]): string {
    }
    return urlBacks;
 }
-// like "{variable} {name}" will be return ["variable","name"]
-export function findVariable(text: string, delimiter: string) {
-   if ((delimiter.length & 1) === 0) {
-   }
-   let variableName = []
-   for (let char of text) {
-      let notBlank = char.trim()
-      let name = "";
-      let findit = false
-      if (notBlank !== "") {
-         if (notBlank == delimiter[0] || notBlank == delimiter[1]) {
-            findit = !findit
-            continue
-         }
-         if (findit) {
-            name = name + char
-         }
-      }
-   }
-}
 
 function isInRange(char: string, range: [begin: number, end: number]) {
    let [begin, end] = range;
@@ -151,6 +131,42 @@ export function AnyToString(val: any): string {
       return `${val}`;
    }
    return covertString;
+}
+
+export function findVariableNames(text: string, formatSymbol: string = "{}") {
+   let leftSymbol = "";
+   let rightSymbol = "";
+   if ((formatSymbol.length & 1) == 0) {
+      leftSymbol = formatSymbol[0]
+      rightSymbol = formatSymbol[1]
+   } else {
+      leftSymbol = formatSymbol[0]
+   }
+   let variableNames: string[] = []
+   let idx = 0;
+   while (idx < text.length) {
+      let variableName: string[] = []
+      if(!text.slice(idx).includes(rightSymbol)){
+         break
+      }
+      if (text[idx] == leftSymbol) {
+         let n = idx + 1
+         while (n < text.length) {
+            if (rightSymbol !== "" && text[n] == rightSymbol) {
+               break
+            } else if (text[n] === " " || !isAlphanum(text[n])) {
+               break
+            }
+            variableName.push(text[n])
+            n++;
+         }
+         variableNames.push(variableName.join(""))
+         variableName = []
+         idx = n;
+      }
+      idx++
+   }
+   return variableNames;
 }
 
 /**

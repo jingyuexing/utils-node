@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseCertString, format, AnyToString, getPathValue, referenceString } from "@/string";
+import { parseCertString, format, AnyToString, getPathValue, referenceString, findVariableNames } from "@/string";
 describe("parse module testing case", () => {
   it("test cert string", () => {
     const cert = parseCertString("C=US\nST=CA\nL=SF\nO=Joyent\nOU=Node.js\nCN=ca1\nemailAddress=ry@clouds.org");
@@ -75,6 +75,7 @@ describe("parse module testing case", () => {
       emailIn:"`email` in ({values})",
       byName:"where @name",
       like:"like {values}",
+      in:`{column} in ({values})`,
       likeEmail:"`email` @like",
       '😍':"like emoji 😎 😍 😘 🤩 😯 😛 🤑",
       likeName:"`name` @like",
@@ -90,14 +91,16 @@ describe("parse module testing case", () => {
       queryByEmail:"where @name",
       update:"update @table set @id,@name,@email",
       query:"select * from @table where @id",
-      updateByName:"@update @queryByName",
+      updateByName:"@update @queryByName@eof",
       groupEmail:"group by `email`",
+      eof:";",
+      comment:"-- {comment}",
       groupName:"group by `name`",
       createById:"@create @byId",
-      fuzzyMatchingEmail:"@select where @likeEmail @pagination",
-      fuzzyMatchingName:"@select where @likeName @pagination",
-      emailList:"@select @queryByEmail @groupEmail @pagination",
-      nameList:"@select @queryByName @groupName @pagination",
+      fuzzyMatchingEmail:"@select where @likeEmail @pagination@eof",
+      fuzzyMatchingName:"@select where @likeName @pagination@eof",
+      emailList:"@select @queryByEmail @groupEmail @pagination@eof",
+      nameList:"@select @queryByName @groupName @pagination@eof",
       findName:"@select @byName",
       selectById:"@select @byId @pagination",
       findMine:"@我",
@@ -108,9 +111,9 @@ describe("parse module testing case", () => {
    expect(refrence.createById).eq("insert user ({id},{name},{email}) where id={id}")
    expect(refrence.findName).eq("select * from user where name={name}")
    expect(refrence.pagination).eq("offset {page} limit {size}")
-   expect(refrence.emailList).eq("select * from user where name={name} group by `email` offset {page} limit {size}")
-   expect(refrence.updateByName).eq("update user set id={id},name={name},email={email} where name={name}")
-   expect(refrence.fuzzyMatchingName).eq("select * from user where `name` like {values} offset {page} limit {size}")
+   expect(refrence.emailList).eq("select * from user where name={name} group by `email` offset {page} limit {size};")
+   expect(refrence.updateByName).eq("update user set id={id},name={name},email={email} where name={name};")
+   expect(refrence.fuzzyMatchingName).eq("select * from user where `name` like {values} offset {page} limit {size};")
    expect(refrence.findEmoji).eq("like emoji 😎 😍 😘 🤩 😯 😛 🤑")
    expect(parser("@id")).eq("id={id}")
    expect(parser("@name")).eq("name={name}")
@@ -129,6 +132,56 @@ describe("parse module testing case", () => {
       fuzzyMatchingName:refrence.fuzzyMatchingName,
       findMine:refrence.findMine,
       findEmoji:refrence.findEmoji
+   })
+  })
+  it("testing find variable names",()=>{
+
+   let result = findVariableNames("name is {name} {hello} {field} {val} {}:#ddd")
+   expect(result[0]).eq("name")
+   expect(result[1]).eq("hello")
+   expect(result[2]).eq("field")
+   expect(result[3]).eq("val")
+
+
+   let result2 = findVariableNames("name is [name] {hello} {field} {val} {}:#ddd","[]")
+   expect(result2.length).eq(1)
+   expect(result2[0]).eq("name")
+
+   let result3 = findVariableNames("name is $name $id {hello} {field} {val} {}:#ddd","$")
+   expect(result3[0]).eq("name")
+   expect(result3[1]).eq("id")
+
+   let result4 = findVariableNames("will be found some :thing",":")
+   expect(result4[0]).eq("thing")
+
+   console.log({
+      result,
+      result2,
+      result3,
+      result4
+   })
+  })
+  it("testing work",()=>{
+   const ref = {
+      table:"user",
+      name:"name={name}",
+      id:"id={id}",
+      age:"age={age}",
+      limit:"limit {size}",
+      offset:"offset {page}",
+      pagination:"@offset @limit",
+      comment:"-- {comment}",
+      select:"select * from @table",
+      byId:"where @id",
+      byName:"where @name",
+      groupBy:"group by `{column}`",
+      getCountrys:"@select @byId @groupBy @pagination",
+   }
+   const [sqlstring,_] = referenceString(ref)
+   let variables = findVariableNames(sqlstring.getCountrys)
+   console.log({
+      sql:sqlstring.getCountrys,
+      variables
    })
   })
 });
