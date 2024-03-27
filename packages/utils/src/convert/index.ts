@@ -317,3 +317,38 @@ export function stringToNumber(str:string,base=10,callback=stringToNumberCallbac
    }
    return result
 }
+
+/**
+ * [hexStringToBufferConverter description]
+ * @param  {string} hexString [description]
+ * @return {Buffer}           [description]
+ */
+export function hexStringToBufferConverter(hexString: string): Buffer {
+   if (hexString.startsWith('0x')) {
+      hexString = hexString.substring(2);
+   }
+
+   if (hexString.length % 2 !== 0) {
+      throw new Error('Invalid hex string length');
+   }
+
+   const buffer = Buffer.alloc(hexString.length / 2);
+   for (let i = 0; i < hexString.length; i += 2) {
+      const byte = parseInt(hexString.substr(i, 2), 16);
+      buffer.writeUInt8(byte, i / 2);
+   }
+
+   return buffer;
+}
+/**
+ * [bufferToHexStringConverter description]
+ * @param  {Buffer} buff [description]
+ * @return {string}      [description]
+ */
+export function bufferToHexStringConverter(buff:Buffer):string{
+   let result = ""
+   for(let i = 0;i < buff.byteLength;i++){
+      result += buff.at(i)?.toString(16).padStart(2,"0")
+   }
+   return result
+}

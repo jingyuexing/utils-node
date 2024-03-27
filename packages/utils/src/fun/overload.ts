@@ -1,8 +1,17 @@
-/**
- * Represents the signature of an overloaded function.
- * The last element of the tuple is the actual function implementation.
- */
-type OverloadSignature<T extends any[]> = [...T, (...args: any[]) => any];
+type TypeMap = {
+   number:number,
+   string:string,
+   boolean:boolean,
+   undefined:undefined,
+   null:null,
+   bigint:bigint,
+   Date:Date,
+   ArrayBuffer:ArrayBuffer,
+}
+
+type Impl<T extends (keyof TypeMap)[]> = {
+   [I in keyof T]:TypeMap[T[I]]
+}
 /**
  * Creates an overloaded function that can have multiple implementations based on argument types.
  * @returns The overloaded function.
@@ -38,7 +47,7 @@ export function Overload() {
     *               The last element of the arguments must be the actual function implementation.
     * @throws {Error} Throws an error if the last argument is not a function.
     */
-   overload.addImpl = function <T extends any[]>(...args: OverloadSignature<T>): void {
+   overload.addImpl = function <T extends (keyof TypeMap)[]>(...args:[...T,(...args:Impl<T>)=>any]): void {
       const fn = args.pop();
       if (typeof fn !== 'function') {
          throw new Error('Last argument must be a function');

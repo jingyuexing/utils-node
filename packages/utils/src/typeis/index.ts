@@ -123,7 +123,7 @@ export function isNaN(val: unknown): val is typeof NaN {
  * @return {boolean}  is like an array is true else false
  */
 export function isArrayLike(val: unknown & { length: number } & { size?: number }): boolean {
-  return val.length !== undefined || val.size !== undefined;
+  return val.length !== void 0 || val.size !== void 0;
 }
 
 /**

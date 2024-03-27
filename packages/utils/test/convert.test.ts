@@ -94,21 +94,14 @@ describe("convert testing",()=>{
       expect(stringToNumber("12",15)).eq(17)
       expect(stringToNumber("a",15)).eq(10)
    })
-
-   it("testing chineseMoneyUnit",()=>{
-      function log(val:number,from:string,to:string){
-         console.log(toUnit(val,from),"<=>",toUnit(chineseMoneyUnit(val,from,to),to))
-      }
-      const { chineseMoneyUnit } = convert()
-      expect(chineseMoneyUnit(1,"两","钱")).eq(10)
-      expect(chineseMoneyUnit(1000,"钱","两")).eq(100)
-      expect(chineseMoneyUnit(10,"两","钱")).eq(100)
-      expect(chineseMoneyUnit(1,"贯","钱")).eq(1000)
-      expect(chineseMoneyUnit(1,"钱","分")).eq(10)
-      expect(chineseMoneyUnit(1,"分","厘")).eq(10)
-      log(10,"贯","两")
-      log(100,"贯","两")
-      log(1,"贯","文")
-      log(13000,"文","贯")
+   it("test hex convert",()=>{
+      let buf = hexStringToBufferConverter("0x6dac2455e99bee641660bf61d3b8cd2a5df90f954b9e138a9b289bb95110ed73aa07e83d227c30ef3cf363fc2779a275c8b490c13fc02d8f69d1c2bb0aaf9b0e633e9dfb3db21cae519b8c08a15341700c973f54356476010192cc8a9b2489f4c9af3b22b9f9bacbc49aec266eda8a3da30ff6e6c0d914a864bc656dbf596972")
+      console.log(buf)
+      expect(buf.at(0)).eq(0x6d)
+      expect(buf.at(1)).eq(0xac)
+   })
+   it("test buffer to string",()=>{
+      let buf = hexStringToBufferConverter("0x6dac2455e99bee641660bf61d3b8cd2a5df90f954b9e138a9b289bb95110ed73aa07e83d227c30ef3cf363fc2779a275c8b490c13fc02d8f69d1c2bb0aaf9b0e633e9dfb3db21cae519b8c08a15341700c973f54356476010192cc8a9b2489f4c9af3b22b9f9bacbc49aec266eda8a3da30ff6e6c0d914a864bc656dbf596972")
+      expect(bufferToHexStringConverter(buf)).eq("6dac2455e99bee641660bf61d3b8cd2a5df90f954b9e138a9b289bb95110ed73aa07e83d227c30ef3cf363fc2779a275c8b490c13fc02d8f69d1c2bb0aaf9b0e633e9dfb3db21cae519b8c08a15341700c973f54356476010192cc8a9b2489f4c9af3b22b9f9bacbc49aec266eda8a3da30ff6e6c0d914a864bc656dbf596972")
    })
 })

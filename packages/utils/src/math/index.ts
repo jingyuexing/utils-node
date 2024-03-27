@@ -63,3 +63,12 @@ export function getRandomInt(min:number, max:number) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+/**
+ * [DECIMAL description]
+ * @param {number} integer 整数位数
+ * @param {number} float   小数位数
+ */
+function decimal(integer:number,float:number){
+
+}

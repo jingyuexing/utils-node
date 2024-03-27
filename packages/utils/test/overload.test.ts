@@ -1,5 +1,5 @@
 import { Overload } from '@/fun/overload';
-import { describe, expect, it, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe("function overload testing case",()=>{
    it("two params case",()=>{
