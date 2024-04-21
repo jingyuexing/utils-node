@@ -177,13 +177,10 @@ export function filterEmpty<T extends any[] | Map<any, any> | (Object & {})>(obj
  * @returns {Omit<T, K>}  A new object without the specified keys.
  */
 export function OmitObjectKeys<T extends object & {}, K extends keyof T>(object: T, keys: K[]): Omit<T, K> {
-  const OmitObject = {} as Omit<T, K>;
-  Object.keys(object).forEach((key) => {
-    if (keys.indexOf(key as K) === -1) {
-      (OmitObject as any)[key] = (object as any)[key];
-    }
-  });
-  return OmitObject;
+   const OmitObject = {} as Omit<T, K>;
+   return objectFilter(object, (key) => {
+      return !(keys.indexOf(key as K) !== -1)
+   }) as Omit<T, K>
 }
 
 /**
@@ -193,13 +190,23 @@ export function OmitObjectKeys<T extends object & {}, K extends keyof T>(object:
  * @returns {Pick<T, K>}  A new object containing only the specified keys.
  */
 export function PickObjectKeys<T extends object, K extends keyof T>(object: T, keys: K[]): Pick<T, K> {
-  const pickedObject = {} as Pick<T, K>;
-  Object.keys(object).forEach((key) => {
-    if (keys.indexOf(key as K) !== -1) {
-      (pickedObject as any)[key] = (object as any)[key];
-    }
-  });
-  return pickedObject;
+   return objectFilter(object, (key) => {
+      return keys.indexOf(key as K) !== -1
+   }) as Pick<T, K>
+}
+/**
+ * the object filter
+ * @type {T}
+ */
+export function objectFilter<T extends object>(target: T, filter: (key: keyof T, value: T[keyof T]) => boolean) {
+   const filterObject = {}
+   Object.getOwnPropertyNames(target).forEach((key) => {
+      let value = (target as any)[key as T[keyof T]]
+      if (Boolean(filter(key as keyof T, value))) {
+         (filterObject as any)[key] = value
+      }
+   })
+   return filterObject
 }
 
 export function randomChoosen<T>(arr: T[], nums: number) {
