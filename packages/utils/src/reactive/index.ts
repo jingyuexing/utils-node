@@ -5,17 +5,17 @@ export function reactive<T extends object & {}>(obj: T) {
   let _setter: <S>(target: T, key: string | symbol, value: any) => S
   let _reactiveObject: T = {} as T;
   const handler: ProxyHandler<T> = {
-    get(target, key, receiver) {
+    get(target, key) {
       if (!isUndefined(_getter)) {
         _getter(target, key)
       }
-      return Reflect.get(target, key, receiver);
+      return Reflect.get(target, key, _reactiveObject);
     },
-    set(target, key, value, receiver) {
+    set(target, key, value) {
       if (!isUndefined(_setter)) {
         _setter(target, key, value)
       }
-      return Reflect.set(target, key, value, receiver);
+      return Reflect.set(target, key, value, _reactiveObject);
     },
   };
   if (typeof Proxy !== "undefined") {

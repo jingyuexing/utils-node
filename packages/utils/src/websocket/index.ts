@@ -1,4 +1,4 @@
-import { isUndefined } from "..";
+import { isUndefined } from "../typeis";
 
 export function useSocket(socketURL: `${"ws" | "wss"}://${string}:${number}`) {
    const ws = new WebSocket(socketURL);
