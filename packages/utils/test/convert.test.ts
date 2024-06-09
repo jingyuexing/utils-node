@@ -1,4 +1,4 @@
-import { convert } from '@/convert';
+import { convert , numberToString, toChineseNumber, stringToNumber } from '@/convert';
 import { describe, expect, it } from 'vitest';
 
 describe("convert testing",()=>{
