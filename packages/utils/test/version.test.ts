@@ -1,4 +1,4 @@
-import { greatThan, version, versionValidate } from "@/version"
+import { greatThan,version, versionValidate } from "@/version"
 import { describe, it, expect } from "vitest"
 describe("test version parse",()=>{
    it("test versionValidate",()=>{
@@ -15,9 +15,14 @@ describe("test version parse",()=>{
       expect(ver?.patch).eq(1)
    })
    it("test greatThan",()=>{
-      let gt = greatThan("0.0.1","0.0.2")
-      expect(gt).eq(false)
+      expect(greatThan("0.0.1","0.0.2")).eq(false)
       expect(greatThan("0.0.2","0.1.3")).eq(false)
       expect(greatThan("0.3.2","0.1.3")).eq(true)
+   })
+   it("test compare version",()=>{
+      expect(version("0.0.1")!.gt("0.0.2")).eq(false)
+      expect(version("0.0.2")?.eq("0.0.2")).eq(true)
+      expect(version("0.0.2")?.lt("0.1.2")).eq(true)
+      expect(version("0.1.2")?.ge("0.0.2")).eq(true)
    })
 })
