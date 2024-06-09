@@ -314,3 +314,19 @@ export function typeis(val: unknown) {
     return "object";
   }
 }
+
+/**
+ * check if current runtime is browser then return true otherwise false
+ * @return {boolean} the result
+ */
+export function isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof window.document !== 'undefined';
+}
+
+/**
+ * check if current runtime is node then return true otherwise false
+ * @return {boolean} the result
+ */
+export function isNode(): boolean {
+    return typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
+}
