@@ -195,7 +195,7 @@ export function PickObjectKeys<T extends object, K extends keyof T>(object: T, k
    }) as Pick<T, K>
 }
 /**
- * the object filter
+ * [target description]
  * @type {T}
  */
 export function objectFilter<T extends object>(target: T, filter: (key: keyof T, value: T[keyof T]) => boolean) {
