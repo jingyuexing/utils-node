@@ -6,6 +6,7 @@ import {
    isUpper,
    isNumberic,
    isLower,
+   getPathValue,
    findVariableNames,
    referenceString
 } from "@/string";
