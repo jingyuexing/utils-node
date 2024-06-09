@@ -165,12 +165,12 @@ export function convert() {
 
       return value * multiplier;
    }
-   const MoneyUnit = ["贯","两","文","钱","分","厘"] as const
-   function chineseMoneyUnit(val:number,from:typeof MoneyUnit[number],to:typeof MoneyUnit[number]){
-      if(!(MoneyUnit.includes(from) && MoneyUnit.includes(to))){
+   const MoneyUnit = ["贯", "两", "文", "钱", "分", "厘"] as const
+   function chineseMoneyUnit(val: number, from: typeof MoneyUnit[number], to: typeof MoneyUnit[number]) {
+      if (!(MoneyUnit.includes(from) && MoneyUnit.includes(to))) {
          return -1
       }
-      const unit = [100,1,0.1,0.1,0.01,0.001]
+      const unit = [100, 1, 0.1, 0.1, 0.01, 0.001]
       return (val * unit[MoneyUnit.indexOf(from)]) / unit[MoneyUnit.indexOf(to)]
    }
    return {
@@ -294,9 +294,9 @@ export function numberToString(number: number, base: number = 10, callback: type
    }
 }
 
-function stringToNumberCallback(digits:string):number{
+function stringToNumberCallback(digits: string) {
    let _digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-$".split("")
-   return _digits.indexOf(digits)
+   return [_digits.indexOf(digits), _digits.length]
 }
 
 /**
@@ -306,12 +306,18 @@ function stringToNumberCallback(digits:string):number{
  * @param  {(digits:string)=>number} [callback=stringToNumberCallback] 字符串格式化函数
  * @return {number}  转换结果
  */
-export function stringToNumber(str:string,base=10,callback=stringToNumberCallback){
+export function stringToNumber(str: string, base = 10, callback = stringToNumberCallback) {
    let result = 0
    let power = 1
-   let number = str.split("")
-   for(let i = number.length;i>0;i--){
-      let val = callback(number[i-1])
+   let number: string[] = str.split("")
+   if (base === 16) {
+      number = str.toUpperCase().split("")
+   }
+   for (let i = number.length; i > 0; i--) {
+      let [val] = callback(number[i - 1])
+      if (val > base) {
+         throw Error(`the number "${number[i - 1]}" out of range max:${base},but got:${val}`)
+      }
       result += (val * power)
       power *= base
    }
@@ -345,10 +351,10 @@ export function hexStringToBufferConverter(hexString: string): Buffer {
  * @param  {Buffer} buff [description]
  * @return {string}      [description]
  */
-export function bufferToHexStringConverter(buff:Buffer):string{
+export function bufferToHexStringConverter(buff: Buffer): string {
    let result = ""
-   for(let i = 0;i < buff.byteLength;i++){
-      result += buff.at(i)?.toString(16).padStart(2,"0")
+   for (let i = 0; i < buff.byteLength; i++) {
+      result += buff.at(i)?.toString(16).padStart(2, "0")
    }
    return result
 }
