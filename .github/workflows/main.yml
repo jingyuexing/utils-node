@@ -31,5 +31,5 @@ jobs:
           version: 8.5.1
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - run: pnpm install
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm run test:utils
