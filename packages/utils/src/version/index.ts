@@ -9,20 +9,45 @@ interface Version {
 }
 
 interface Logic {
+   /**
+    * compare version is great than other version
+    * @param  {VersionString} version version string
+    * @return {boolean}               if version less than then return `true` otherwise is `false`
+    */
    gt(version: VersionString): boolean;
+   /**
+    * compare version is less than other version
+    * @param  {VersionString} version version string
+    * @return {boolean}               if version less than then return `true` otherwise is `false`
+    */
    lt(version: VersionString): boolean;
+   /**
+    * compare version is great than or equal other version
+    * @param  {VersionString} version version string
+    * @return {boolean}               if version great than or equal then return `true` otherwise is `false`
+    */
    ge(version: VersionString): boolean;
+   /**
+    * compare version is less than or equal other version
+    * @param  {VersionString} version version string
+    * @return {boolean}               if version less than then return `true` otherwise is `false`
+    */
    le(version: VersionString): boolean;
+   /**
+    * compare version is equal other version
+    * @param  {VersionString} version version string
+    * @return {boolean}               if version equal then return `true` otherwise is false
+    */
    eq(version: VersionString): boolean;
 }
 
 type VersionString =
-  | `${number}.${number}.${number}`
-  | `${number}.${number}.${number}.${number}`
-  | `${number}.${number}.${number}.${number}-${"alpha" | "beta"}`
-  | `v${number}.${number}.${number}`
-  | `v${number}.${number}.${number}.${number}`
-  | `v${number}.${number}.${number}.${number}-${"alpha" | "beta"}`;
+   | `${number}.${number}.${number}`
+   | `${number}.${number}.${number}.${number}`
+   | `${number}.${number}.${number}.${number}-${"alpha" | "beta"}`
+   | `v${number}.${number}.${number}`
+   | `v${number}.${number}.${number}.${number}`
+   | `v${number}.${number}.${number}.${number}-${"alpha" | "beta"}`;
 
 // the version regexp
 const versionRE =
@@ -126,4 +151,20 @@ export function compareVersion(version1: VersionString, version2: VersionString)
 
 export function versionValidate(version: string) {
    return _parser.test(version);
+}
+/**
+ * Compares if version1 is greater than version2.
+ *
+ * This API is deprecated. It is recommended to use
+ *
+ * ```ts
+ * version(version_a)?.gt(version_b)
+ * ```
+ * @deprecated
+ * @param {VersionString} version1 The first version string to compare.
+ * @param {VersionString} version2 The second version string to compare.
+ * @returns {boolean} Returns true if version1 is greater than version2, otherwise false. Returns undefined if the version comparison fails.
+ */
+export function greatThan(version1: VersionString, version2: VersionString) {
+   return version(version1)!.gt(version2)
 }
