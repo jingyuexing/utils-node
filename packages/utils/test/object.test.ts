@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { entries, Extends, exclude, renameKey, traverseObject, OmitObjectKeys, PickObjectKeys, objectFilter, settingZeroValue as settingZeroValue, nestedObject } from "@/object";
+import { isString } from "@/typeis";
 
 describe("object testing", () => {
    it("test entries", () => {
