@@ -1,4 +1,4 @@
-import { convert , numberToString, toChineseNumber, stringToNumber } from '@/convert';
+import { convert, numberToString, stringToNumber, toChineseNumber, hexStringToBufferConverter, bufferToHexStringConverter } from '@/convert';
 import { describe, expect, it } from 'vitest';
 
 describe("convert testing", () => {

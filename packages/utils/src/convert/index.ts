@@ -129,53 +129,17 @@ export function convert() {
       "百",
       "千",
       "万",
-      "十万",
-      "百万",
-      "千万",
       "亿",
-      "十亿",
-      "百亿",
-      "千亿",
       "兆",
-      "十兆",
-      "百兆",
-      "千兆",
       "京",
-      "十京",
-      "百京",
-      "千京",
       "垓",
-      "十垓",
-      "百垓",
-      "千垓",
       "秭",
-      "十秭",
-      "百秭",
-      "千秭",
       "穰",
-      "十穰",
-      "百穰",
-      "千穰",
       "沟",
-      "十沟",
-      "百沟",
-      "千沟",
       "涧",
-      "十涧",
-      "百涧",
-      "千涧",
       "正",
-      "十正",
-      "百正",
-      "千正",
       "载",
-      "十载",
-      "百载",
-      "千载",
       "极",
-      "十极",
-      "百极",
-      "千极",
       "恒河沙",
       "阿僧祇",
       "那由他",
@@ -201,6 +165,14 @@ export function convert() {
 
       return value * multiplier;
    }
+   const MoneyUnit = ["贯", "两", "文", "钱", "分", "厘"] as const
+   function chineseMoneyUnit(val: number, from: typeof MoneyUnit[number], to: typeof MoneyUnit[number]) {
+      if (!(MoneyUnit.includes(from) && MoneyUnit.includes(to))) {
+         return -1
+      }
+      const unit = [100, 1, 0.1, 0.1, 0.01, 0.001]
+      return (val * unit[MoneyUnit.indexOf(from)]) / unit[MoneyUnit.indexOf(to)]
+   }
    return {
       length,
       weight,
@@ -211,6 +183,7 @@ export function convert() {
       volumnEN,
       volumeUS,
       numeralSystemConverter,
+      chineseMoneyUnit
    };
 }
 
@@ -287,7 +260,7 @@ function removeTrailingZero(str: string): string {
 
 function numberStringCallback(remainder: number, unit: number): [remainder: string, unit: string, digitsLength: number] {
    const numberMap = {
-      "number": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-$".split(''),
+      "number": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-$".split(''),
    }
    return [numberMap['number'][remainder], "", numberMap['number'].length]
 }
@@ -321,9 +294,9 @@ export function numberToString(number: number, base: number = 10, callback: type
    }
 }
 
-function stringToNumberCallback(digits: string): number {
-   let _digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-$".split("")
-   return _digits.indexOf(digits)
+function stringToNumberCallback(digits: string) {
+   let _digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-$".split("")
+   return [_digits.indexOf(digits), _digits.length]
 }
 
 /**
@@ -336,11 +309,52 @@ function stringToNumberCallback(digits: string): number {
 export function stringToNumber(str: string, base = 10, callback = stringToNumberCallback) {
    let result = 0
    let power = 1
-   let number = str.split("")
+   let number: string[] = str.split("")
+   if (base === 16) {
+      number = str.toUpperCase().split("")
+   }
    for (let i = number.length; i > 0; i--) {
-      let val = callback(number[i - 1])
+      let [val] = callback(number[i - 1])
+      if (val > base) {
+         throw Error(`the number "${number[i - 1]}" out of range max:${base},but got:${val}`)
+      }
       result += (val * power)
       power *= base
+   }
+   return result
+}
+
+/**
+ * [hexStringToBufferConverter description]
+ * @param  {string} hexString [description]
+ * @return {Buffer}           [description]
+ */
+export function hexStringToBufferConverter(hexString: string): Buffer {
+   if (hexString.startsWith('0x')) {
+      hexString = hexString.substring(2);
+   }
+
+   if (hexString.length % 2 !== 0) {
+      throw new Error('Invalid hex string length');
+   }
+
+   const buffer = Buffer.alloc(hexString.length / 2);
+   for (let i = 0; i < hexString.length; i += 2) {
+      const byte = parseInt(hexString.substr(i, 2), 16);
+      buffer.writeUInt8(byte, i / 2);
+   }
+
+   return buffer;
+}
+/**
+ * [bufferToHexStringConverter description]
+ * @param  {Buffer} buff [description]
+ * @return {string}      [description]
+ */
+export function bufferToHexStringConverter(buff: Buffer): string {
+   let result = ""
+   for (let i = 0; i < buff.byteLength; i++) {
+      result += buff.at(i)?.toString(16).padStart(2, "0")
    }
    return result
 }
