@@ -106,6 +106,27 @@ export function convert() {
       const factor = 1024 ** Math.abs(diff);
       return diff > 0 ? value / factor : value * factor;
    };
+   type Nums = '' | 'k' | 'w' | 'b' | 'm'
+   const currency = (value: number, from: Nums, to: Nums): number => {
+      const numsTable: Record<Nums, number> = {
+         "": 1,
+         "k": 1e3,
+         "w": 1e4,
+         "m": 1e6,
+         "b": 1e9,
+      };
+      const lowerFrom = from.toLowerCase() as Nums
+      const lowerTo = to.toLowerCase() as Nums
+      if (!numsTable.hasOwnProperty(lowerFrom)) {
+         throw new Error(`Invalid 'from' unit: ${from}`);
+      }
+
+      if (!numsTable.hasOwnProperty(lowerTo)) {
+         throw new Error(`Invalid 'to' unit: ${to}`);
+      }
+
+      return (value * numsTable[lowerFrom]) / numsTable[lowerTo];
+   }
    type NetworkUnit = "bps" | "Kbps" | "Mbps" | "Gbps";
    const netSpeed = (speed: number, from: NetworkUnit, to: NetworkUnit): number => {
       const networkUnitTable: Record<NetworkUnit, number> = {
@@ -182,6 +203,7 @@ export function convert() {
       volumn,
       volumnEN,
       volumeUS,
+      currency,
       numeralSystemConverter,
       chineseMoneyUnit
    };
