@@ -1,16 +1,16 @@
 type TypeMap = {
-   number:number,
-   string:string,
-   boolean:boolean,
-   undefined:undefined,
-   null:null,
-   bigint:bigint,
-   Date:Date,
-   ArrayBuffer:ArrayBuffer,
+   number: number,
+   string: string,
+   boolean: boolean,
+   undefined: undefined,
+   null: null,
+   bigint: bigint,
+   Date: Date,
+   ArrayBuffer: ArrayBuffer,
 }
 
 type Impl<T extends (keyof TypeMap)[]> = {
-   [I in keyof T]:TypeMap[T[I]]
+   [I in keyof T]: TypeMap[T[I]]
 }
 /**
  * Creates an overloaded function that can have multiple implementations based on argument types.
@@ -47,12 +47,44 @@ export function Overload() {
     *               The last element of the arguments must be the actual function implementation.
     * @throws {Error} Throws an error if the last argument is not a function.
     */
-   overload.addImpl = function <T extends (keyof TypeMap)[]>(...args:[...T,(...args:Impl<T>)=>any]): void {
+   overload.addImpl = function <T extends (keyof TypeMap)[]>(...args: [...T, (...args: Impl<T>) => any]): void {
       const fn = args.pop();
       if (typeof fn !== 'function') {
          throw new Error('Last argument must be a function');
       }
       overloads.set(args.join(','), fn);
+   };
+   /**
+    * Creates a Proxy-wrapped function that dispatches to the correct overload implementation
+    * based on the runtime argument types.
+    *
+    * This enables you to call the returned function directly as if it's overloaded.
+    *
+    * @example
+    * const overload = Overload();
+    * overload.addImpl('number', 'number', (a, b) => a + b);
+    * const fn = overload.proxy();
+    * fn(1, 2); // 3
+    *
+    * @throws {Error} Throws if `Proxy` is not supported in the environment.
+    * @throws {Error} Throws if no overload implementations have been registered.
+    * @throws {Error} Throws if called with arguments that do not match any registered implementation.
+    *
+    * @returns {Function} A callable Proxy function that dispatches to the correct overload.
+    */
+   overload.proxy = () => {
+      if (typeof Proxy !== 'function') {
+         throw new Error('Proxy is not supported in this environment.');
+      }
+      const slots = () => { }; // 占位函数
+      return new Proxy<(...args: any[])=>any>(slots, {
+         apply(target, thisArg, argArray) {
+            if (overloads.size === 0) {
+               throw new Error('No overload implementations have been registered.');
+            }
+            return overload(...argArray);
+         },
+      });
    };
 
    return overload;
