@@ -1,6 +1,6 @@
 import { reactive } from "@/reactive";
 import { describe, expect, it } from "vitest";
-import { isNumber } from "..";
+import { isNumber } from "@/typeis";
 
 describe("testing reactive", () => {
    it("testing reactive: setter", () => {
